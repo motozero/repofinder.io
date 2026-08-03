@@ -163,7 +163,7 @@ async function recommendWithGitHub(input: string, goal: string, token?: string):
   }
 
   const candidates = await gatherCandidates(ctx, goal, token);
-  const recommendations = rankFallbackCandidates(candidates, goal).slice(0, 5).map((candidate) => ({
+  const recommendations = rankFallbackCandidates(candidates, goal, ctx.langHint).slice(0, 5).map((candidate) => ({
     fullName: candidate.fullName,
     url: candidate.url,
     stars: candidate.stars,
@@ -195,7 +195,7 @@ async function recommendWithGitHub(input: string, goal: string, token?: string):
 // stronger signal than mentioning it once in a broad description.
 export function rankFallbackCandidates<
   T extends Pick<RepoMeta, "fullName" | "description" | "topics" | "stars" | "archived">,
->(candidates: T[], goal: string): T[] {
+>(candidates: T[], goal: string, sourceLanguage?: string): T[] {
   const baseTerms = goal.toLowerCase().match(/[a-z0-9]+/g)?.filter((term) => term.length >= 3) ?? [];
   const aliases: Record<string, string[]> = {
     authentication: ["auth"],
@@ -216,6 +216,9 @@ export function rankFallbackCandidates<
       if (name.includes(term)) value += 100;
       if (topics.includes(term)) value += 40;
       if (description.includes(term)) value += 15;
+    }
+    if (/^(typescript|javascript)$/i.test(sourceLanguage ?? "") && /\b(laravel|django|rails|spring|symfony|wordpress)\b/.test(name)) {
+      value -= 180;
     }
     if (candidate.archived) value -= 200;
     return value;
@@ -425,7 +428,7 @@ export function ecosystemLanguages(lang?: string | null): Set<string> | null {
 // drop real tools (e.g. no bare "examples" or "learning", which appear in many
 // legitimate tool descriptions).
 const NON_TOOL_PATTERN =
-  /\b(awesome|interview|tutorials?|boilerplates?|starter[\s-]?kits?|cheat[\s-]?sheets?|best[\s-]?practices?|roadmaps?|cookbooks?|handbooks?|study[\s-]?guides?|curated[\s-]?lists?)\b/i;
+  /\b(awesome|interview|tutorials?|boilerplates?|starter[\s-]?kits?|cheat[\s-]?sheets?|best[\s-]?practices?|roadmaps?|cookbooks?|handbooks?|study[\s-]?guides?|curated[\s-]?lists?|lists?\s+of)\b/i;
 
 export function looksLikeNonTool(meta: { fullName: string; description?: string | null }): boolean {
   return NON_TOOL_PATTERN.test(`${meta.fullName} ${meta.description ?? ""}`);

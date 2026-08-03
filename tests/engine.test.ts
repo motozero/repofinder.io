@@ -103,6 +103,7 @@ describe("looksLikeNonTool", () => {
       { fullName: "SimulatedGREG/electron-vue", description: "An Electron and Vue.js quick start boilerplate" },
       { fullName: "someone/react-tutorial", description: "Learn React step by step" },
       { fullName: "user/python-cheatsheet", description: "Comprehensive Python cheatsheet" },
+      { fullName: "2factorauth/twofactorauth", description: "List of sites with two factor auth support" },
     ];
     for (const r of junk) assert.equal(looksLikeNonTool(r), true, r.fullName);
   });
@@ -135,6 +136,14 @@ describe("rankFallbackCandidates", () => {
       { fullName: "better-auth/better-auth", description: "Authentication framework", topics: ["authentication"], stars: 29_400, archived: false },
     ], "authentication");
     assert.equal(ranked[0]?.fullName, "better-auth/better-auth");
+  });
+
+  it("penalizes a framework from a different ecosystem", () => {
+    const ranked = rankFallbackCandidates([
+      { fullName: "jeremykenedy/laravel-auth", description: "Authentication for Laravel", topics: [], stars: 3_000, archived: false },
+      { fullName: "lucia-auth/lucia", description: "Authentication for JavaScript", topics: ["auth"], stars: 10_000, archived: false },
+    ], "authentication", "TypeScript");
+    assert.equal(ranked[0]?.fullName, "lucia-auth/lucia");
   });
 });
 
