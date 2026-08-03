@@ -6,7 +6,7 @@ The visitor needs a calm chat surface. RepoFinder renders a deliberately small M
 
 Repository README text and visitor project fields stay out of the model’s system instructions. The Worker JSON-encodes them in a user-role context object and tells the model to treat that object as untrusted data. A poisoned README can still contain bad advice, but it does not receive system-level authority.
 
-The operator needs enough context to understand real use. Each chat turn is written to `chat_messages` in D1. A Telegram notification contains the project, goal, transcript link, recent conversation, and an explicit allowlist of Cloudflare request fields. Long conversations are split into Telegram-safe chunks. D1 remains the complete record.
+The operator needs useful signals without an alert for every bot or passive visit. Each chat turn is written to `chat_messages` in D1, but chat does not trigger Telegram. A Telegram alert is sent only after a project analysis finishes successfully. It contains the submitted project, goal, and an explicit allowlist of Cloudflare request fields. Page visits, repository clicks, contact forms, invalid inputs, failed analyses, and chat turns stay silent. D1 remains the complete record.
 
 The important design choice is that the Worker never serializes the whole request. `requestSnapshot` selects only these categories:
 
@@ -25,12 +25,13 @@ flowchart LR
   O --> A["Question-ending assistant reply"]
   A --> D["Store assistant turn in D1"]
   D --> U["Simple safe links in the browser"]
-  D --> T["Detailed private Telegram notification"]
+  P["Visitor submits a project and goal"] --> R["Worker completes the analysis"]
+  R --> T["One private Telegram alert"]
 ```
 
 ## Interview explanation
 
-“I treated chat rendering and operator observability as separate products. The browser gets the minimum useful formatting. D1 gets the durable transcript. Telegram gets an operator card built from an explicit request allowlist. That gave me useful feedback without making the customer-facing chat noisy or copying secret-bearing request fields.”
+“I treated chat rendering and operator observability as separate products. The browser gets the minimum useful formatting. D1 gets the durable transcript and passive telemetry. Telegram gets one allowlisted operator card only after a real analysis completes. That preserves useful feedback without turning bot traffic into notification noise.”
 
 ## Try it
 

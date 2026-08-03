@@ -4,8 +4,8 @@ The key architecture decision is one shared recommendation engine with two thin 
 
 The production interface shows the source project, the model mode, evidence from GitHub, and concrete what, why, and how guidance. Each recommended repository opens in a new tab. A builder can also ask OpenAI a follow-up question about any result.
 
-That chat keeps the in-app answer simple, formats safe links, and always ends with a useful next question. D1 stores the full transcript and an explicit allowlist of request context. Telegram sends page, search, contact, and conversation alerts. Secrets stay in Cloudflare Worker secrets, and every Cloudflare resource is isolated under the RepoFinder service.
+That chat keeps the in-app answer simple, formats safe links, and always ends with a useful next question. D1 stores the full transcript and an explicit allowlist of request context. Telegram sends one alert only after a valid analysis completes, so passive visits and bot traffic stay quiet. Secrets stay in Cloudflare Worker secrets, and every Cloudflare resource is isolated under the RepoFinder service.
 
-Codex helped implement the product, pressure-test it, review the security boundaries, deploy it, and document the reasoning. The evidence is forty-five deterministic tests, a real browser QA pass, a post-deploy canary across five pages, and a lesson book designed for a one-hour skim.
+Codex helped implement the product, pressure-test it, review the security boundaries, deploy it, and document the reasoning. The evidence is forty-eight deterministic tests, a real browser QA pass, a post-deploy canary across five pages, and a lesson book designed for a one-hour skim.
 
 The result is more than a demo. It is a reusable pattern for turning an OpenAI capability into a focused developer experience with observable behavior, graceful failure, and an explanation another engineer can audit.

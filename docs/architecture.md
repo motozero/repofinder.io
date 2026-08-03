@@ -49,7 +49,7 @@ flowchart TB
 
 ## Chat and activity boundary
 
-The browser and operator views are intentionally different. The browser renders an escaped Markdown subset with safe new-tab links. D1 stores complete chat turns. Telegram receives an operator-focused summary and recent conversation. Request metadata comes from an allowlist, never from serializing the request object.
+The browser and operator views are intentionally different. The browser renders an escaped Markdown subset with safe new-tab links. D1 stores complete chat turns and passive request telemetry. Telegram receives one operator-focused alert only after a valid analysis completes. Request metadata comes from an allowlist, never from serializing the request object.
 
 ```mermaid
 sequenceDiagram
@@ -64,5 +64,10 @@ sequenceDiagram
   O-->>W: Answer ending in a useful question
   W->>D: Store assistant turn
   W-->>V: Safe Markdown and new-tab links
-  W->>T: Operator card and recent conversation
+  V->>W: Project and goal for analysis
+  W->>O: Source analysis and recommendation ranking
+  O-->>W: Ranked recommendations
+  W->>D: Store completed analysis
+  W-->>V: Recommendation results
+  W->>T: Completed analysis alert
 ```

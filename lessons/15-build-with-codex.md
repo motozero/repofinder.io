@@ -16,7 +16,7 @@ The work was split into four contracts:
 
 - Clean browser chat with useful links
 - Durable Q&A records in D1
-- Detailed private Telegram activity cards
+- One private Telegram card per completed analysis
 - Clear privacy and secret-handling boundaries
 
 Each contract had a verification path before implementation began.
@@ -27,7 +27,7 @@ The active desktop sandbox could read the RepoFinder repository but could not wr
 
 ## 5. Attack the boundary conditions
 
-The adversarial pass covered script injection in model output, unsafe link protocols, long Telegram messages, malformed chat session IDs, direct API calls with invalid repository names, request secrets in headers and bodies, query-string leakage, missing Cloudflare fields, and desktop versus mobile user agents.
+The adversarial pass covered script injection in model output, unsafe link protocols, Telegram notification timing, malformed chat session IDs, direct API calls with invalid repository names, request secrets in headers and bodies, query-string leakage, missing Cloudflare fields, and desktop versus mobile user agents.
 
 One test caught a real design mismatch: the app removed its own query string but initially retained a query string inside the referrer. Codex fixed the implementation and added a regression test before deployment.
 
@@ -44,7 +44,7 @@ flowchart LR
   K --> G["Commit and GitHub push"]
 ```
 
-Deterministic tests prove exact code behavior. Browser QA proves the actual customer flow. D1 queries prove storage. Telegram delivery proves the operator loop. A production canary proves the deployed artifact, not just the local checkout.
+Deterministic tests prove exact code behavior. Browser QA proves the actual customer flow. D1 queries prove storage. A single completed-analysis Telegram delivery proves the operator loop stays useful without passive-traffic noise. A production canary proves the deployed artifact, not just the local checkout.
 
 ## Interview explanation
 

@@ -1,5 +1,5 @@
 // Password-protected /admin dashboard: recent chats, repo clicks, searches, and
-// contact messages, so the owner can see activity without clicking each Telegram
+// contact messages, so the owner can see activity without relying on Telegram
 // link. HTTP Basic auth against the ADMIN_PASSWORD secret.
 
 import { htmlSecurityHeaders } from "./security";

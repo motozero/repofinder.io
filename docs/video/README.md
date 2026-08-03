@@ -9,4 +9,4 @@ The strongest live version is:
 1. Run the OpenAI Node SDK and production evals example.
 2. Point out the `OpenAI ranked` label and live GitHub signals.
 3. Open repo chat and ask for alternatives with official links.
-4. Close on the shared engine, HTTP and MCP surfaces, 45 tests, D1 telemetry, Telegram alerts, and isolated Cloudflare resources.
+4. Close on the shared engine, HTTP and MCP surfaces, 48 tests, D1 telemetry, completed-analysis Telegram alerts, and isolated Cloudflare resources.

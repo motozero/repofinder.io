@@ -281,16 +281,6 @@ export function requestIntelHtml(request: Request, v: Visitor): string {
     .join("\n");
 }
 
-export function pageVisitText(request: Request, v: Visitor): string {
-  const snapshot = requestSnapshot(request, v);
-  return [
-    "👀 <b>NEW REPOFINDER VISIT</b>",
-    `🔗 <b>Page:</b> ${tgEsc(snapshot.url)}`,
-    `📨 <b>Request:</b> ${tgEsc(snapshot.method)} ${tgEsc(snapshot.path)}`,
-    requestIntelHtml(request, v),
-  ].join("\n");
-}
-
 async function sendTelegram(env: NotifyEnv, text: string, parseMode?: "HTML"): Promise<void> {
   if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) return;
   try {

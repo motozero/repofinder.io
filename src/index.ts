@@ -5,10 +5,8 @@ import { handleAdmin } from "./admin";
 import {
   visitor,
   notify,
-  notifyPlain,
   logRequest,
   isDocumentVisit,
-  pageVisitText,
   requestIntelHtml,
   tgEsc,
   type Visitor,
@@ -36,7 +34,7 @@ export default {
 
     if (isDocumentVisit(request, url)) {
       const v = visitor(request);
-      ctx.waitUntil(Promise.allSettled([logRequest(env, "page_view", request, v), notify(env, pageVisitText(request, v))]));
+      ctx.waitUntil(logRequest(env, "page_view", request, v));
     }
 
     // Surface 2: our own stateless MCP server over Streamable HTTP.
@@ -106,7 +104,12 @@ export default {
   },
 } satisfies ExportedHandler<Env>;
 
-async function handleRecommend(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+export async function handleRecommend(
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext,
+  recommendFn: typeof recommend = recommend,
+): Promise<Response> {
   let body: { repoUrl?: string; goal?: string };
   try {
     body = (await request.json()) as { repoUrl?: string; goal?: string };
@@ -121,19 +124,19 @@ async function handleRecommend(request: Request, env: Env, ctx: ExecutionContext
   if (repoUrl.length > 500) return Response.json({ error: "repoUrl is too long (max 500 chars)." }, { status: 400 });
   if (goal.length > 300) return Response.json({ error: "goal is too long (max 300 chars)." }, { status: 400 });
 
-  // Someone is trying the tool. Record who (geo, network, device) and ping
-  // Telegram, without blocking or breaking the request if either is unconfigured.
   const v = visitor(request);
-  ctx.waitUntil(
-    Promise.allSettled([
-      logUsage(env, repoUrl, goal, v),
-      logRequest(env, "recommend", request, v, { repo: repoUrl }),
-      notify(env, usageText(request, repoUrl, goal, v)),
-    ]),
-  );
 
   try {
-    const result = await recommend(repoUrl, goal, env);
+    const result = await recommendFn(repoUrl, goal, env);
+    // A completed analysis is the only Telegram event. Invalid input, failed
+    // analysis, page visits, clicks, contact forms, and chat turns stay silent.
+    ctx.waitUntil(
+      Promise.allSettled([
+        logUsage(env, repoUrl, goal, v),
+        logRequest(env, "recommend", request, v, { repo: repoUrl }),
+        notify(env, analysisText(request, repoUrl, goal, v)),
+      ]),
+    );
     return Response.json(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error.";
@@ -169,8 +172,7 @@ async function handleContact(request: Request, env: Env, ctx: ExecutionContext):
   const v = visitor(request);
   ctx.waitUntil(logRequest(env, "contact", request, v));
 
-  // D1 is the durable record, so a message is never lost even if email or
-  // Telegram is down. Email and Telegram are best-effort notifications on top.
+  // D1 is the durable record, so a message is never lost if email is down.
   let stored = false;
   if (env.DB) {
     try {
@@ -186,19 +188,17 @@ async function handleContact(request: Request, env: Env, ctx: ExecutionContext):
   }
 
   const emailPromise = sendContactEmail(env, name, email, message);
-  const tgPromise = notifyContact(env, request, name, email, message, v);
 
   if (stored) {
-    ctx.waitUntil(Promise.allSettled([emailPromise, tgPromise]));
+    ctx.waitUntil(Promise.allSettled([emailPromise]));
     return Response.json({ ok: true });
   }
 
   // No durable store available (e.g. local dev without D1): only claim success
   // if a notification actually went out.
   const emailOk = await emailPromise;
-  await tgPromise;
-  if (emailOk || (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID)) return Response.json({ ok: true });
-  if (!env.RESEND_API_KEY && !env.TELEGRAM_BOT_TOKEN) {
+  if (emailOk) return Response.json({ ok: true });
+  if (!env.RESEND_API_KEY) {
     return Response.json({ error: "Contact is not configured on the server yet." }, { status: 503 });
   }
   return Response.json({ error: "Could not send the message. Please try again later." }, { status: 502 });
@@ -243,26 +243,13 @@ async function sendContactEmail(env: Env, name: string, email: string, message: 
   }
 }
 
-function usageText(request: Request, input: string, goal: string, v: Visitor): string {
+export function analysisText(request: Request, input: string, goal: string, v: Visitor): string {
   return [
-    "🔎 <b>REPOFINDER SEARCH</b>",
+    "🔎 <b>REPOFINDER ANALYSIS COMPLETE</b>",
     `🛠 <b>Project:</b> ${tgEsc(input)}`,
     `🎯 <b>Goal:</b> ${tgEsc(goal)}`,
     requestIntelHtml(request, v),
   ]
     .filter(Boolean)
     .join("\n");
-}
-
-function contactText(request: Request, name: string, email: string, v: Visitor): string {
-  return [
-    "✉️ <b>NEW REPOFINDER CONTACT</b>",
-    `👤 <b>From:</b> ${tgEsc(name)} (${tgEsc(email)})`,
-    requestIntelHtml(request, v),
-  ].join("\n");
-}
-
-async function notifyContact(env: Env, request: Request, name: string, email: string, message: string, v: Visitor): Promise<void> {
-  await notify(env, contactText(request, name, email, v));
-  await notifyPlain(env, `Contact message from ${name} <${email}>\n\n${message}`);
 }

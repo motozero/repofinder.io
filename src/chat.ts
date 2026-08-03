@@ -8,12 +8,7 @@ import { parseRepo, getRepo, getReadme } from "./github";
 import { callOpenAIMessages, MODELS, type ChatTurn } from "./openai";
 import {
   visitor,
-  notify,
-  notifyPlain,
   logRequest,
-  requestIntelHtml,
-  tgEsc,
-  type Visitor,
 } from "./telemetry";
 import { htmlSecurityHeaders } from "./security";
 
@@ -21,11 +16,8 @@ export interface ChatEnv {
   OPENAI_API_KEY?: string;
   GITHUB_TOKEN?: string;
   DB: D1Database;
-  TELEGRAM_BOT_TOKEN?: string;
-  TELEGRAM_CHAT_ID?: string;
 }
 
-const vid8 = (id: string) => (id || "anon").slice(0, 8);
 const now = () => new Date().toISOString();
 
 // POST /api/event - a visitor clicked a recommended repo (or similar).
@@ -55,26 +47,13 @@ export async function handleEvent(request: Request, env: ChatEnv, ctx: Execution
       } catch (err) {
         console.log("d1 events error", err instanceof Error ? err.message : String(err));
       }
-      if (type === "repo_click" && repo) {
-        await notify(
-          env,
-          [
-            "👆 <b>Repo click</b>",
-            `${tgEsc(vid8(vId))} opened ${tgEsc(repo)}`,
-            input ? `Building: ${tgEsc(input)}${goal ? " / " + tgEsc(goal) : ""}` : "",
-            requestIntelHtml(request, v),
-          ]
-            .filter(Boolean)
-            .join("\n"),
-        );
-      }
     })(),
   );
   return Response.json({ ok: true });
 }
 
 // POST /api/chat - one turn of a chat about a repo. Stores the turn and returns
-// OpenAI's reply. On the first turn it pings the owner with a transcript link.
+// OpenAI's reply. The complete conversation remains available in D1.
 export async function handleChat(request: Request, env: ChatEnv, ctx: ExecutionContext): Promise<Response> {
   let body: { visitorId?: string; sessionId?: string; repo?: string; input?: string; goal?: string; message?: string };
   try {
@@ -105,12 +84,10 @@ export async function handleChat(request: Request, env: ChatEnv, ctx: ExecutionC
   const goal = (body.goal ?? "").slice(0, 300);
   ctx.waitUntil(logRequest(env, "chat_turn", request, v, { visitorId: vId, repo, sessionId }));
 
-  // New session? (drives the Telegram ping and the session row.)
-  let isNew = false;
+  // Create the session row on the first turn.
   try {
     const existing = await env.DB.prepare("SELECT id FROM chat_sessions WHERE id=?").bind(sessionId).first();
-    isNew = !existing;
-    if (isNew) {
+    if (!existing) {
       await env.DB.prepare(
         "INSERT INTO chat_sessions (id, created_at, visitor_id, repo, input, goal, browser, os, asn, as_org, country, city, region) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       )
@@ -159,23 +136,6 @@ export async function handleChat(request: Request, env: ChatEnv, ctx: ExecutionC
   }
 
   await insertMessage(env, sessionId, "assistant", reply);
-
-  // Ping Telegram on every turn with the request allowlist and the stored
-  // conversation. D1 remains the complete durable record.
-  const link = `https://repofinder.io/c/${encodeURIComponent(sessionId)}`;
-  const storedConversation = await loadStoredConversation(env, sessionId);
-  ctx.waitUntil(
-    notifyChatActivity(env, request, v, {
-      isNew,
-      visitorId: vId,
-      repo,
-      input,
-      goal,
-      transcriptUrl: link,
-      messages: storedConversation.messages,
-      truncated: storedConversation.truncated,
-    }),
-  );
 
   return Response.json({ reply });
 }
@@ -239,65 +199,6 @@ export function ensureForwardQuestion(reply: string, repo: string, goal: string)
   if (/\?\s*$/.test(clean)) return clean;
   const focus = goal ? `your ${goal} rollout` : `using ${repo} in your project`;
   return `${clean}\n\nWhat should we optimize first for ${focus}: setup speed, operating cost, or control?`;
-}
-
-async function loadStoredConversation(
-  env: ChatEnv,
-  sessionId: string,
-): Promise<{ messages: { role: string; content: string }[]; truncated: boolean }> {
-  try {
-    const rows = await env.DB.prepare(
-      "SELECT role, content FROM chat_messages WHERE session_id=? ORDER BY id DESC LIMIT 25",
-    )
-      .bind(sessionId)
-      .all();
-    const newest = rows.results as { role: string; content: string }[];
-    return { messages: newest.slice(0, 24).reverse(), truncated: newest.length > 24 };
-  } catch (error) {
-    console.error(JSON.stringify({ event: "d1_conversation_error", message: error instanceof Error ? error.message : String(error) }));
-    return { messages: [], truncated: false };
-  }
-}
-
-interface ChatNotification {
-  isNew: boolean;
-  visitorId: string;
-  repo: string;
-  input: string;
-  goal: string;
-  transcriptUrl: string;
-  messages: { role: string; content: string }[];
-  truncated: boolean;
-}
-
-async function notifyChatActivity(
-  env: ChatEnv,
-  request: Request,
-  v: Visitor,
-  chat: ChatNotification,
-): Promise<void> {
-  const summary = [
-    chat.isNew ? "💬 <b>NEW REPOFINDER CHAT</b>" : "💬 <b>REPOFINDER CHAT UPDATED</b>",
-    `📦 <b>Repo:</b> https://github.com/${tgEsc(chat.repo)}`,
-    chat.input ? `🛠 <b>Project:</b> ${tgEsc(chat.input)}` : "",
-    chat.goal ? `🎯 <b>Goal:</b> ${tgEsc(chat.goal)}` : "",
-    `👤 <b>Visitor:</b> ${tgEsc(vid8(chat.visitorId))}`,
-    `🔗 <b>Transcript:</b> ${tgEsc(chat.transcriptUrl)}`,
-    requestIntelHtml(request, v),
-  ]
-    .filter(Boolean)
-    .join("\n");
-  await notify(env, summary);
-
-  const transcript = [
-    `FULL REPOFINDER CONVERSATION\nRepo: ${chat.repo}\nTranscript: ${chat.transcriptUrl}`,
-    chat.truncated ? "\nShowing the latest 24 messages. The D1 transcript link contains the complete conversation." : "",
-    "",
-    ...chat.messages.map((message) => `${message.role === "assistant" ? "REPOFINDER" : "VISITOR"}:\n${message.content}`),
-  ]
-    .filter(Boolean)
-    .join("\n\n");
-  await notifyPlain(env, transcript);
 }
 
 // GET /c/<id> - read-only transcript. The unguessable session id is the access key.
