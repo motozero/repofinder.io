@@ -11,7 +11,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { parseRepo } from "../src/github.ts";
 import { parseStructured } from "../src/openai.ts";
-import { looksLikeUrl, normalizeUrl, htmlToText, clamp, ecosystemLanguages, looksLikeNonTool, isPublicHostname } from "../src/engine.ts";
+import { looksLikeUrl, normalizeUrl, htmlToText, clamp, ecosystemLanguages, looksLikeNonTool, isPublicHostname, rankFallbackCandidates } from "../src/engine.ts";
 
 describe("parseRepo", () => {
   it("parses a full GitHub URL", () => {
@@ -122,6 +122,19 @@ describe("looksLikeNonTool", () => {
   it("tolerates a missing description", () => {
     assert.equal(looksLikeNonTool({ fullName: "owner/some-tool" }), false);
     assert.equal(looksLikeNonTool({ fullName: "owner/awesome-go", description: null }), true);
+  });
+});
+
+describe("rankFallbackCandidates", () => {
+  it("ranks a capability-specific repo above a more popular broad toolkit", () => {
+    // Regression: ISSUE-001, star count outweighed direct capability fit.
+    // Found by /qa on 2026-08-02.
+    // Report: .gstack/qa-reports/qa-report-localhost-2026-08-02.md
+    const ranked = rankFallbackCandidates([
+      { fullName: "ComposioHQ/composio", description: "Toolkits with authentication support", topics: ["agents"], stars: 29_500, archived: false },
+      { fullName: "better-auth/better-auth", description: "Authentication framework", topics: ["authentication"], stars: 29_400, archived: false },
+    ], "authentication");
+    assert.equal(ranked[0]?.fullName, "better-auth/better-auth");
   });
 });
 

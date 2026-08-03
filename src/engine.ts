@@ -163,7 +163,7 @@ async function recommendWithGitHub(input: string, goal: string, token?: string):
   }
 
   const candidates = await gatherCandidates(ctx, goal, token);
-  const recommendations = candidates.slice(0, 5).map((candidate) => ({
+  const recommendations = rankFallbackCandidates(candidates, goal).slice(0, 5).map((candidate) => ({
     fullName: candidate.fullName,
     url: candidate.url,
     stars: candidate.stars,
@@ -188,6 +188,40 @@ async function recommendWithGitHub(input: string, goal: string, token?: string):
     mode: "github-fallback",
     recommendations,
   };
+}
+
+// Fallback results cannot rely on model judgment, so direct capability fit
+// must outweigh raw popularity. Matching the goal in a repository name is a
+// stronger signal than mentioning it once in a broad description.
+export function rankFallbackCandidates<
+  T extends Pick<RepoMeta, "fullName" | "description" | "topics" | "stars" | "archived">,
+>(candidates: T[], goal: string): T[] {
+  const baseTerms = goal.toLowerCase().match(/[a-z0-9]+/g)?.filter((term) => term.length >= 3) ?? [];
+  const aliases: Record<string, string[]> = {
+    authentication: ["auth"],
+    authorization: ["auth"],
+    evaluations: ["eval"],
+    evaluation: ["eval"],
+    evals: ["eval"],
+    observability: ["telemetry", "tracing"],
+  };
+  const terms = [...new Set(baseTerms.flatMap((term) => [term, ...(aliases[term] ?? [])]))];
+
+  const score = (candidate: T): number => {
+    const name = candidate.fullName.toLowerCase();
+    const description = (candidate.description ?? "").toLowerCase();
+    const topics = candidate.topics.join(" ").toLowerCase();
+    let value = Math.log10(candidate.stars + 1) * 8;
+    for (const term of terms) {
+      if (name.includes(term)) value += 100;
+      if (topics.includes(term)) value += 40;
+      if (description.includes(term)) value += 15;
+    }
+    if (candidate.archived) value -= 200;
+    return value;
+  };
+
+  return [...candidates].sort((a, b) => score(b) - score(a));
 }
 
 // Step 1: figure out what the input is (repo or website) and extract purpose,

@@ -6,7 +6,7 @@
 
 ## Run the happy path
 
-1. Choose `openai/openai-node` and `production evals`.
+1. Choose `honojs/hono` and `authentication`.
 2. Point out the source summary and stack.
 3. Show what, why, how, ease, impact, and live maintenance signals.
 4. Open one repository and explain that facts come from GitHub while fit comes from OpenAI.
