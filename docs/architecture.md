@@ -1,5 +1,19 @@
 # Architecture decisions
 
+```mermaid
+flowchart LR
+  B["Browser"] --> H["POST /api/recommend"]
+  A["Codex or another agent"] --> M["recommend_repos over MCP"]
+  H --> E["recommend(repoOrUrl, goal)"]
+  M --> E
+  E --> G["Live GitHub facts"]
+  E --> O["OpenAI Responses API"]
+  G --> R["Grounded recommendation result"]
+  O --> R
+  O -. unavailable .-> F["Labeled GitHub fallback"]
+  F --> R
+```
+
 ## One engine, two surfaces
 
 The browser and MCP clients call the same `recommend` function. This prevents prompt, ranking, and fallback behavior from drifting across interfaces.
@@ -19,3 +33,36 @@ Missing keys and provider errors fall back to live GitHub ranking. The response 
 ## Deployment boundary
 
 RepoFinder owns a Worker, D1 database, custom domain, GitHub repository, and secrets. No runtime resource is shared with RepoRecommender.
+
+```mermaid
+flowchart TB
+  subgraph RF["RepoFinder silo"]
+    D["repofinder.io"] --> W["Worker: repofinder-io"]
+    W --> DB["D1: repofinder-io"]
+    W --> S["RepoFinder Worker secrets"]
+  end
+  subgraph RR["RepoRecommender silo"]
+    RD["reporecommender.com"] --> RW["Separate Worker"]
+    RW --> RDB["Separate data and secrets"]
+  end
+```
+
+## Chat and activity boundary
+
+The browser and operator views are intentionally different. The browser renders an escaped Markdown subset with safe new-tab links. D1 stores complete chat turns. Telegram receives an operator-focused summary and recent conversation. Request metadata comes from an allowlist, never from serializing the request object.
+
+```mermaid
+sequenceDiagram
+  participant V as Visitor
+  participant W as Cloudflare Worker
+  participant D as D1
+  participant O as OpenAI
+  participant T as Telegram
+  V->>W: Repo question
+  W->>D: Store user turn
+  W->>O: Instructions, repo context, recent turns
+  O-->>W: Answer ending in a useful question
+  W->>D: Store assistant turn
+  W-->>V: Safe Markdown and new-tab links
+  W->>T: Operator card and recent conversation
+```
