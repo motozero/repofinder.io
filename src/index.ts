@@ -2,7 +2,16 @@ import { recommend, InputError, type EngineEnv } from "./engine";
 import { handleMcpRequest } from "./mcp";
 import { handleEvent, handleChat, renderTranscript } from "./chat";
 import { handleAdmin } from "./admin";
-import { visitor, notify, tgEsc, locationLine, networkLine, type Visitor } from "./telemetry";
+import {
+  visitor,
+  notify,
+  logRequest,
+  isDocumentVisit,
+  pageVisitText,
+  requestIntelHtml,
+  tgEsc,
+  type Visitor,
+} from "./telemetry";
 import { enforceRateLimit, type RateLimitBinding } from "./security";
 
 export interface Env extends EngineEnv {
@@ -23,6 +32,11 @@ export interface Env extends EngineEnv {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    if (isDocumentVisit(request, url)) {
+      const v = visitor(request);
+      ctx.waitUntil(Promise.allSettled([logRequest(env, "page_view", request, v), notify(env, pageVisitText(request, v))]));
+    }
 
     // Surface 2: our own stateless MCP server over Streamable HTTP.
     if (url.pathname === "/mcp") {
@@ -109,7 +123,13 @@ async function handleRecommend(request: Request, env: Env, ctx: ExecutionContext
   // Someone is trying the tool. Record who (geo, network, device) and ping
   // Telegram, without blocking or breaking the request if either is unconfigured.
   const v = visitor(request);
-  ctx.waitUntil(Promise.allSettled([logUsage(env, repoUrl, goal, v), notify(env, usageText(repoUrl, goal, v))]));
+  ctx.waitUntil(
+    Promise.allSettled([
+      logUsage(env, repoUrl, goal, v),
+      logRequest(env, "recommend", request, v, { repo: repoUrl }),
+      notify(env, usageText(request, repoUrl, goal, v)),
+    ]),
+  );
 
   try {
     const result = await recommend(repoUrl, goal, env);
@@ -146,6 +166,7 @@ async function handleContact(request: Request, env: Env, ctx: ExecutionContext):
   }
 
   const v = visitor(request);
+  ctx.waitUntil(logRequest(env, "contact", request, v));
 
   // D1 is the durable record, so a message is never lost even if email or
   // Telegram is down. Email and Telegram are best-effort notifications on top.
@@ -164,7 +185,7 @@ async function handleContact(request: Request, env: Env, ctx: ExecutionContext):
   }
 
   const emailPromise = sendContactEmail(env, name, email, message);
-  const tgPromise = notify(env, contactText(name, email, message, v));
+  const tgPromise = notify(env, contactText(request, name, email, message, v));
 
   if (stored) {
     ctx.waitUntil(Promise.allSettled([emailPromise, tgPromise]));
@@ -221,28 +242,23 @@ async function sendContactEmail(env: Env, name: string, email: string, message: 
   }
 }
 
-function usageText(input: string, goal: string, v: Visitor): string {
+function usageText(request: Request, input: string, goal: string, v: Visitor): string {
   return [
-    "🔎 <b>Someone tried RepoFinder</b>",
-    `Input: ${tgEsc(input)}`,
-    `Goal: ${tgEsc(goal)}`,
-    `Where: ${tgEsc(locationLine(v))}`,
-    `Network: ${tgEsc(networkLine(v))}`,
-    `Device: ${tgEsc(v.browser)} on ${tgEsc(v.os)}`,
-    v.colo ? `Edge: ${tgEsc(v.colo)}` : "",
+    "🔎 <b>REPOFINDER SEARCH</b>",
+    `🛠 <b>Project:</b> ${tgEsc(input)}`,
+    `🎯 <b>Goal:</b> ${tgEsc(goal)}`,
+    requestIntelHtml(request, v),
   ]
     .filter(Boolean)
     .join("\n");
 }
 
-function contactText(name: string, email: string, message: string, v: Visitor): string {
+function contactText(request: Request, name: string, email: string, message: string, v: Visitor): string {
   return [
-    "✉️ <b>New contact message</b>",
-    `From: ${tgEsc(name)} (${tgEsc(email)})`,
-    `Where: ${tgEsc(locationLine(v))}`,
-    `Network: ${tgEsc(networkLine(v))}`,
-    `Device: ${tgEsc(v.browser)} on ${tgEsc(v.os)}`,
+    "✉️ <b>NEW REPOFINDER CONTACT</b>",
+    `👤 <b>From:</b> ${tgEsc(name)} (${tgEsc(email)})`,
     "",
     tgEsc(message),
+    requestIntelHtml(request, v),
   ].join("\n");
 }

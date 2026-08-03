@@ -16,14 +16,18 @@ export async function handleAdmin(request: Request, env: AdminEnv): Promise<Resp
       headers: { "content-type": "text/plain" },
     });
   }
-  if (!authorized(request, env.ADMIN_PASSWORD)) {
+  if (!(await authorized(request, env.ADMIN_PASSWORD))) {
     return new Response("Authentication required.", {
       status: 401,
       headers: { "WWW-Authenticate": 'Basic realm="repofinder admin", charset="UTF-8"' },
     });
   }
 
-  const [chats, clicks, searches, contacts] = await Promise.all([
+  const [visits, chats, clicks, searches, contacts] = await Promise.all([
+    query(
+      env,
+      "SELECT created_at, path, method, request_context FROM request_log WHERE event_type='page_view' ORDER BY id DESC LIMIT 50",
+    ),
     query(
       env,
       "SELECT s.id, s.created_at, s.repo, s.visitor_id, s.city, s.country, s.browser, (SELECT COUNT(*) FROM chat_messages m WHERE m.session_id = s.id) AS msgs FROM chat_sessions s ORDER BY s.rowid DESC LIMIT 50",
@@ -33,12 +37,12 @@ export async function handleAdmin(request: Request, env: AdminEnv): Promise<Resp
     query(env, "SELECT created_at, name, email, city, country, message FROM messages ORDER BY rowid DESC LIMIT 30"),
   ]);
 
-  return new Response(adminHtml({ chats, clicks, searches, contacts }), {
+  return new Response(adminHtml({ visits, chats, clicks, searches, contacts }), {
     headers: htmlSecurityHeaders(),
   });
 }
 
-function authorized(request: Request, password: string): boolean {
+async function authorized(request: Request, password: string): Promise<boolean> {
   const header = request.headers.get("Authorization") || "";
   const m = header.match(/^Basic (.+)$/);
   if (!m) return false;
@@ -49,10 +53,15 @@ function authorized(request: Request, password: string): boolean {
     return false;
   }
   const given = decoded.slice(decoded.indexOf(":") + 1); // ignore the username
-  // Constant-time-ish compare.
-  if (given.length !== password.length) return false;
+  const encoder = new TextEncoder();
+  const [givenDigest, expectedDigest] = await Promise.all([
+    crypto.subtle.digest("SHA-256", encoder.encode(given)),
+    crypto.subtle.digest("SHA-256", encoder.encode(password)),
+  ]);
+  const givenBytes = new Uint8Array(givenDigest);
+  const expectedBytes = new Uint8Array(expectedDigest);
   let diff = 0;
-  for (let i = 0; i < given.length; i++) diff |= given.charCodeAt(i) ^ password.charCodeAt(i);
+  for (let i = 0; i < givenBytes.length; i++) diff |= givenBytes[i]! ^ expectedBytes[i]!;
   return diff === 0;
 }
 
@@ -74,6 +83,7 @@ const vshort = (v: unknown): string => String(v ?? "").slice(0, 8);
 const place = (row: Record<string, unknown>): string => [row.city, row.country].filter(Boolean).map(esc).join(", ") || "?";
 
 interface AdminData {
+  visits: Record<string, unknown>[];
   chats: Record<string, unknown>[];
   clicks: Record<string, unknown>[];
   searches: Record<string, unknown>[];
@@ -81,6 +91,12 @@ interface AdminData {
 }
 
 function adminHtml(d: AdminData): string {
+  const visitRows = d.visits
+    .map((row) => {
+      const context = parseRequestContext(row.request_context);
+      return `<tr><td>${esc(when(row.created_at))}</td><td>${esc(row.method)} ${esc(row.path)}</td><td>${esc(context.ip || "?")}</td><td>${esc([context.city, context.region, context.country].filter(Boolean).join(", ") || "?")}</td><td>${esc(context.colo || "?")}</td><td>${esc([context.browser, context.browserVersion].filter(Boolean).join(" ") || "?")}</td><td>${esc(context.device || "?")}</td><td>${esc(context.referrer || "Direct")}</td></tr>`;
+    })
+    .join("");
   const chatRows = d.chats
     .map(
       (r) =>
@@ -125,11 +141,22 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .counts b{color:var(--ink)}
 </style></head><body><div class="wrap">
 <h1>RepoFinder admin</h1>
-<p class="sub">Anonymous product activity. Contact messages include only the details a visitor submits.</p>
-<div class="counts"><span><b>${d.chats.length}</b> chats</span><span><b>${d.clicks.length}</b> repo clicks</span><span><b>${d.searches.length}</b> searches</span><span><b>${d.contacts.length}</b> messages</span></div>
+<p class="sub">Allowlisted operational activity. Request records omit cookies, authorization headers, query strings, and request bodies.</p>
+<div class="counts"><span><b>${d.visits.length}</b> visits</span><span><b>${d.chats.length}</b> chats</span><span><b>${d.clicks.length}</b> repo clicks</span><span><b>${d.searches.length}</b> searches</span><span><b>${d.contacts.length}</b> messages</span></div>
+${section("Page visits", ["When", "Page", "IP", "Where", "Colo", "Browser", "Device", "Referrer"], visitRows, "No visits yet.")}
 ${section("Chats", ["When", "Repo", "Msgs", "Visitor", "Where", "Browser", ""], chatRows, "No chats yet.")}
 ${section("Repo clicks", ["When", "Repo", "Visitor", "Where", "Browser"], clickRows, "No clicks yet.")}
 ${section("Searches", ["When", "Project", "Goal", "Where", "Browser"], searchRows, "No searches yet.")}
 ${section("Contact messages", ["When", "Name", "Email", "Where", "Message"], contactRows, "No messages yet.")}
 </div></body></html>`;
+}
+
+function parseRequestContext(value: unknown): Record<string, unknown> {
+  if (typeof value !== "string") return {};
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : {};
+  } catch {
+    return {};
+  }
 }

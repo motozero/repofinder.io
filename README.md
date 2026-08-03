@@ -18,7 +18,7 @@ GitHub search can find popular repositories. It does not understand the source p
 - A checked-in Codex skill teaches agents when to call the tool.
 - Deterministic tests and an LLM eval harness cover different failure classes.
 - Cloudflare-native rate limits protect public model routes from spend amplification.
-- Product analytics omit raw IP addresses and user-agent strings.
+- Operational telemetry is explicitly allowlisted, disclosed in the product, and excludes cookies, authorization headers, query strings, and request bodies.
 
 ## Architecture
 
@@ -76,8 +76,18 @@ The Worker, D1 database, domain, and secrets are all named for RepoFinder and ar
 npx wrangler d1 execute repofinder-io --remote --file=schema.sql
 npx wrangler secret put OPENAI_API_KEY
 npx wrangler secret put GITHUB_TOKEN
+npx wrangler secret put TELEGRAM_BOT_TOKEN
+npx wrangler secret put TELEGRAM_CHAT_ID
 npm run deploy
 ```
+
+For an existing database, apply new files in [`migrations`](./migrations) before deployment. The current migration is:
+
+```bash
+npx wrangler d1 execute repofinder-io --remote --file=migrations/0001_request_log.sql
+```
+
+The [privacy page](https://repofinder.io/privacy) describes the request fields stored in D1 and sent in operator notifications.
 
 The production configuration is in [`wrangler.jsonc`](./wrangler.jsonc). Never commit real keys.
 
@@ -97,6 +107,9 @@ The [`lessons`](./lessons) directory is a compact course built around the actual
 10. [Separate tests from evals](./lessons/10-tests-and-evals.md)
 11. [Keep Cloudflare resources isolated](./lessons/11-cloudflare-isolation.md)
 12. [Ship and tell the demo story](./lessons/12-ship-the-demo.md)
+13. [Separate chat from operator telemetry](./lessons/13-chat-and-telemetry.md)
+14. [Rotate exposed secrets](./lessons/14-secrets-and-keys.md)
+15. [Use Codex as a build loop](./lessons/15-build-with-codex.md)
 
 ## Origin
 

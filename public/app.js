@@ -283,7 +283,11 @@ if (chatModal) {
         body: JSON.stringify({ visitorId: visitorId(), sessionId: chatSession, repo: chatRepo, input: lastInput, goal: lastGoal, message: text }),
       });
       const data = await res.json();
-      thinking.textContent = res.ok ? data.reply || "(no reply)" : data.error || "Something went wrong.";
+      if (res.ok) {
+        thinking.innerHTML = renderChatMarkdown(data.reply || "(no reply)");
+      } else {
+        thinking.textContent = data.error || "Something went wrong.";
+      }
     } catch (_) {
       thinking.textContent = "Could not reach the chat service.";
     }
@@ -293,7 +297,8 @@ if (chatModal) {
   function appendChat(who, text) {
     const div = document.createElement("div");
     div.className = "chat-msg " + (who === "you" ? "you" : "bot");
-    div.textContent = text;
+    if (who === "you") div.textContent = text;
+    else div.innerHTML = renderChatMarkdown(text);
     chatLog.appendChild(div);
     chatLog.scrollTop = chatLog.scrollHeight;
     return div;
@@ -306,4 +311,71 @@ function escapeHtml(s) {
 }
 function escapeAttr(s) {
   return escapeHtml(s);
+}
+
+// Render the small Markdown subset used by repo chat. All source text is
+// escaped first, and only http/https links are promoted to anchors.
+function safeChatUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function chatEmphasis(value) {
+  return escapeHtml(value)
+    .replace(/`([^`\n]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+}
+
+function chatInline(value) {
+  const token = /\[([^\]\n]{1,240})\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g;
+  let output = "";
+  let cursor = 0;
+  for (const match of value.matchAll(token)) {
+    output += chatEmphasis(value.slice(cursor, match.index));
+    let rawUrl = match[2] || match[3] || "";
+    const suffix = match[2] ? "" : (rawUrl.match(/[.,;:!?]+$/) || [""])[0];
+    if (suffix) rawUrl = rawUrl.slice(0, -suffix.length);
+    const url = safeChatUrl(rawUrl);
+    const label = match[1] || rawUrl;
+    output += url
+      ? `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${chatEmphasis(label)}</a>`
+      : chatEmphasis(match[0]);
+    if (url && suffix) output += chatEmphasis(suffix);
+    cursor = match.index + match[0].length;
+  }
+  return output + chatEmphasis(value.slice(cursor));
+}
+
+function renderChatMarkdown(value) {
+  const lines = String(value).trim().split(/\r?\n/);
+  const html = [];
+  let list = null;
+  const closeList = () => {
+    if (list) html.push(`</${list}>`);
+    list = null;
+  };
+  for (const line of lines) {
+    const bullet = line.match(/^\s*[-*]\s+(.+)$/);
+    const numbered = line.match(/^\s*\d+[.)]\s+(.+)$/);
+    if (bullet || numbered) {
+      const nextList = bullet ? "ul" : "ol";
+      if (list !== nextList) {
+        closeList();
+        list = nextList;
+        html.push(`<${list}>`);
+      }
+      html.push(`<li>${chatInline((bullet || numbered)[1])}</li>`);
+      continue;
+    }
+    closeList();
+    if (!line.trim()) continue;
+    const heading = line.match(/^#{1,3}\s+(.+)$/);
+    html.push(`<p>${heading ? `<strong>${chatInline(heading[1])}</strong>` : chatInline(line)}</p>`);
+  }
+  closeList();
+  return html.join("");
 }

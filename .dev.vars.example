@@ -18,10 +18,12 @@ RESEND_API_KEY=
 CONTACT_TO_EMAIL=
 CONTACT_FROM_EMAIL=
 
-# Telegram notifications: ping you whenever someone runs the tool or sends a
-# contact message, with the visitor's geo, network (ASN), and device. Optional.
-# Create a bot with @BotFather for the token; get your chat id from @userinfobot.
-# In production set these with `wrangler secret put <NAME>`.
+# Telegram notifications for page visits, searches, contact messages, and chat
+# conversations. Notifications include the explicitly allowlisted request data
+# documented at /privacy. Optional. Create a bot with @BotFather, send /start to
+# it, and read the resulting chat id through the Telegram Bot API. Rotate any bot
+# token that has appeared in a screenshot, terminal log, or chat.
+# In production set both values with `wrangler secret put <NAME>`.
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_CHAT_ID=
 

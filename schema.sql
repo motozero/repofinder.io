@@ -37,7 +37,7 @@ CREATE INDEX IF NOT EXISTS idx_usage_created ON usage(created_at);
 CREATE INDEX IF NOT EXISTS idx_messages_created ON messages(created_at);
 
 -- Anonymous interaction events (e.g. clicking a recommended repo). visitor_id is
--- a random id kept in the browser. Raw IP addresses and user agents are not stored.
+-- a random id kept in the browser. Request details live only in request_log below.
 CREATE TABLE IF NOT EXISTS events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   created_at TEXT NOT NULL,
@@ -74,3 +74,20 @@ CREATE TABLE IF NOT EXISTS chat_messages (
   content TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON chat_messages(session_id);
+
+-- Explicitly allowlisted operational request telemetry. request_context is JSON
+-- and never contains cookies, authorization headers, query strings, or bodies.
+CREATE TABLE IF NOT EXISTS request_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at TEXT NOT NULL,
+  event_type TEXT NOT NULL,
+  path TEXT NOT NULL,
+  method TEXT NOT NULL,
+  visitor_id TEXT,
+  repo TEXT,
+  session_id TEXT,
+  request_context TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_request_log_created ON request_log(created_at);
+CREATE INDEX IF NOT EXISTS idx_request_log_event ON request_log(event_type, created_at);
+CREATE INDEX IF NOT EXISTS idx_request_log_session ON request_log(session_id);

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="What RepoFinder records when you visit, search, or chat." />
+    <title>RepoFinder privacy</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <nav class="topnav" aria-label="Primary navigation">
+      <a class="brand" href="/"><span class="radar" aria-hidden="true"></span><span>Repo<span class="accent">Finder</span></span></a>
+      <div class="navlinks"><a href="/faq">FAQ</a><a href="/about">About</a><a href="https://github.com/motozero/repofinder.io" target="_blank" rel="noopener">GitHub</a></div>
+    </nav>
+
+    <main class="wrap page">
+      <h1>Privacy</h1>
+      <p class="page-lede">RepoFinder is a public technical demo. It records visits and interactions so the owner can operate the service and understand how people use it.</p>
+      <article class="prose">
+        <h2>What is recorded</h2>
+        <p>For page visits and product interactions, RepoFinder stores an allowlisted request record in its Cloudflare D1 database. It can include the page path, time, raw IP address, user agent, browser and device labels, referrer, approximate city and region, network and ASN, Cloudflare data center, language, protocol, TLS version, and connection timing. Some fields depend on what Cloudflare provides and may be unavailable.</p>
+        <p>Searches include the project and goal you submit. Chat sessions include your full questions and RepoFinder’s full responses. Contact messages include the name, email, and message you choose to submit.</p>
+        <h2>Notifications</h2>
+        <p>Page visits, searches, contact messages, and chats can also be sent to the site owner through a private Telegram bot. Chat notifications can include the recent conversation and the request fields described above. The complete chat remains available in D1.</p>
+        <h2>What is excluded</h2>
+        <p>The telemetry allowlist does not copy cookies, authorization headers, URL query strings, or request bodies. Do not submit passwords, API keys, private source code, or other secrets in a search, contact form, or chat.</p>
+        <h2>Your choices</h2>
+        <p>If you do not want a chat stored or sent to the owner, do not use the chat feature. For questions or deletion requests, use the <a href="/contact">contact form</a>.</p>
+      </article>
+      <p class="page-cta"><a href="/">Return to RepoFinder</a>.</p>
+    </main>
+
+    <footer class="foot"><span>Built with Codex, OpenAI, and Cloudflare.</span><span><a href="/contact">Contact</a> · <a href="/privacy" aria-current="page">Privacy</a></span></footer>
+  </body>
+</html>
