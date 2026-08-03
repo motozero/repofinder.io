@@ -1,0 +1,30 @@
+{
+  "name": "repofinder",
+  "version": "1.0.0",
+  "description": "Find maintained open source repositories that complement your project.",
+  "repository": "https://github.com/motozero/repofinder.io",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit && tsc -p evals/tsconfig.json --noEmit && tsc -p tests/tsconfig.json --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "esbuild tests/*.test.ts --bundle --platform=node --format=esm --packages=external --outdir=dist/tests --out-extension:.js=.mjs --log-level=warning && node --test \"dist/tests/*.test.mjs\"",
+    "eval": "esbuild evals/run.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/eval.mjs --log-level=warning && node dist/eval.mjs",
+    "cf-typegen": "wrangler types",
+    "check": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260613.1",
+    "@types/node": "^25.9.3",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.90.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "agents": "^0.16.0",
+    "zod": "^4.4.3"
+  }
+}

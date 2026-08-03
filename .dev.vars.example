@@ -1,0 +1,30 @@
+# Copy this file to .dev.vars (which is gitignored) and fill in real values.
+# NEVER commit .dev.vars or real keys. In production these are set with
+# `wrangler secret put <NAME>`, not stored in the repo. See lessons/14-secrets-and-keys.md.
+
+# OpenAI API key for the Responses API recommendation engine.
+OPENAI_API_KEY=sk-xxxxxxxx
+
+# GitHub personal access token, read-only public scope, for search rate limits.
+# Optional. Leave blank to run unauthenticated (60 requests/hour, fine for dev).
+GITHUB_TOKEN=
+
+# Contact form (Resend). Optional: leave blank and /api/contact returns a clear
+# "not configured" error. RESEND_API_KEY is from resend.com. CONTACT_TO_EMAIL is
+# where messages are delivered. With the default sender, Resend only delivers to
+# your Resend account email; set a verified domain in CONTACT_FROM_EMAIL to send
+# anywhere. In production set these with `wrangler secret put <NAME>`.
+RESEND_API_KEY=
+CONTACT_TO_EMAIL=
+CONTACT_FROM_EMAIL=
+
+# Telegram notifications: ping you whenever someone runs the tool or sends a
+# contact message, with the visitor's geo, network (ASN), and device. Optional.
+# Create a bot with @BotFather for the token; get your chat id from @userinfobot.
+# In production set these with `wrangler secret put <NAME>`.
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID=
+
+# Password for the /admin activity dashboard (HTTP Basic auth, any username).
+# Until set, /admin returns "not configured". In production: wrangler secret put.
+ADMIN_PASSWORD=

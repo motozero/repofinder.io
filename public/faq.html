@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RepoFinder FAQ</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <nav class="topnav" aria-label="Primary navigation">
+      <a class="brand" href="/"><span class="radar" aria-hidden="true"></span><span>Repo<span class="accent">Finder</span></span></a>
+      <div class="navlinks"><a href="/faq" aria-current="page">FAQ</a><a href="/about">About</a><a href="https://github.com/motozero/repofinder.io" target="_blank" rel="noopener">GitHub</a></div>
+    </nav>
+
+    <main class="wrap page">
+      <h1>Frequently asked questions</h1>
+      <div class="faq">
+        <article class="qa"><h2>What does RepoFinder recommend?</h2><p>Installable open source projects that complement your codebase. It filters out tutorials, starter kits, archived projects, and obvious substitutes when better tools are available.</p></article>
+        <article class="qa"><h2>What signals does it use?</h2><p>OpenAI analyzes the source and explains project-specific fit. GitHub supplies repository metadata, stars, forks, recent commits, contributor counts, language, and maintenance status.</p></article>
+        <article class="qa"><h2>What happens if OpenAI is unavailable?</h2><p>The request falls back to deterministic ranking over live GitHub data. The interface labels the mode, so graceful degradation never looks like model output.</p></article>
+        <article class="qa"><h2>Can an agent use it?</h2><p>Yes. The same engine is exposed as the <code>recommend_repos</code> tool at the remote MCP endpoint. The repository includes a Codex skill that teaches an agent when and how to call it.</p></article>
+        <article class="qa"><h2>Are recommendations safe to ship?</h2><p>They are candidates, not approvals. Check the license, security posture, API stability, and your own requirements before production use. RepoFinder makes that evaluation faster, but it does not replace it.</p></article>
+        <article class="qa"><h2>Is the deployment connected to RepoRecommender?</h2><p>No. RepoFinder has its own GitHub repository, Cloudflare Worker, D1 database, domain, and production secrets.</p></article>
+      </div>
+      <p class="page-cta"><a href="/">Run a search</a> or <a href="https://github.com/motozero/repofinder.io/tree/main/lessons" target="_blank" rel="noopener">read the lessons</a>.</p>
+    </main>
+
+    <footer class="foot"><span>Built with Codex, OpenAI, and Cloudflare.</span><a href="https://github.com/motozero/repofinder.io" target="_blank" rel="noopener">Source and lessons</a></footer>
+  </body>
+</html>

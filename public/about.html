@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Why RepoFinder exists and how it was built with Codex, OpenAI, and Cloudflare." />
+    <title>About RepoFinder</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <nav class="topnav" aria-label="Primary navigation">
+      <a class="brand" href="/"><span class="radar" aria-hidden="true"></span><span>Repo<span class="accent">Finder</span></span></a>
+      <div class="navlinks"><a href="/faq">FAQ</a><a href="/about" aria-current="page">About</a><a href="https://github.com/motozero/repofinder.io" target="_blank" rel="noopener">GitHub</a></div>
+    </nav>
+
+    <main class="wrap page">
+      <p class="kicker left">THE BUILD BEHIND THE DEMO</p>
+      <h1>From a hackathon insight to a reusable developer tool</h1>
+      <article class="prose">
+        <p>Open source is usually easy to try once you know the right project. Discovery is the hard part. RepoFinder turns a codebase and a goal into a short, evidence-backed list of tools that a developer can evaluate quickly.</p>
+        <p>It grew out of <a href="https://reporadar.io" target="_blank" rel="noopener">RepoRadar.io</a>, which placed second out of 302 teams at a global generative UI hackathon. I rebuilt the core idea as an OpenAI-native demo with a clearer provider boundary, structured outputs, model routing, evals, and a fallback path that keeps the experience useful when the model is unavailable.</p>
+        <p>One recommendation engine serves both the browser API and a remote MCP tool. A checked-in Codex skill shows an agent when to call that tool. The deployment is isolated in its own Cloudflare Worker, D1 database, domain, and secrets.</p>
+        <p>I am Christo Roberts. The complete source, architecture notes, eval harness, and lesson book are public so the demo is useful after the first “whoa.”</p>
+      </article>
+      <p class="page-cta"><a href="/">Try RepoFinder</a> or <a href="https://github.com/motozero/repofinder.io" target="_blank" rel="noopener">read the source</a>.</p>
+    </main>
+
+    <footer class="foot"><span>Built with Codex, OpenAI, and Cloudflare.</span><a href="https://github.com/motozero/repofinder.io/tree/main/lessons" target="_blank" rel="noopener">Source and lessons</a></footer>
+  </body>
+</html>

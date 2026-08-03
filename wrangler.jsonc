@@ -1,0 +1,30 @@
+{
+  // RepoFinder: one Worker serves the static frontend (Static Assets)
+  // and the /api/* routes. D1 binding is added in the database lesson.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "repofinder-io",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-05-09",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "repofinder.io", "custom_domain": true }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "MCP_OBJECT", "class_name": "RepoFinderMCP" }]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["RepoFinderMCP"] }
+  ],
+  // Contact messages and tool-usage events. Schema in schema.sql.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "repofinder-io", "database_id": "2a2dfff6-7df5-4d0e-9957-a91640a0489f" }
+  ]
+}
