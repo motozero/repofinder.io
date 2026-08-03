@@ -11,7 +11,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { parseRepo } from "../src/github.ts";
 import { parseStructured } from "../src/openai.ts";
-import { looksLikeUrl, normalizeUrl, htmlToText, clamp, ecosystemLanguages, looksLikeNonTool, isPublicHostname, rankFallbackCandidates } from "../src/engine.ts";
+import { looksLikeUrl, normalizeUrl, htmlToText, clamp, ecosystemLanguages, looksLikeNonTool, isPublicHostname, rankFallbackCandidates, InputError } from "../src/engine.ts";
 
 describe("parseRepo", () => {
   it("parses a full GitHub URL", () => {
@@ -213,7 +213,11 @@ describe("looksLikeUrl / normalizeUrl (input classification)", () => {
       assert.equal(isPublicHostname(host), false, host);
     }
     assert.equal(isPublicHostname("github.com"), true);
-    assert.throws(() => normalizeUrl("http://127.0.0.1/admin"), /Private or local/);
+    assert.throws(() => normalizeUrl("http://127.0.0.1/admin"), (error) => {
+      assert.ok(error instanceof InputError);
+      assert.match(error.message, /Private or local/);
+      return true;
+    });
   });
 });
 

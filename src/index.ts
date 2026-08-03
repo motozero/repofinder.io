@@ -1,4 +1,4 @@
-import { recommend, type EngineEnv } from "./engine";
+import { recommend, InputError, type EngineEnv } from "./engine";
 import { RepoFinderMCP } from "./mcp";
 import { handleEvent, handleChat, renderTranscript } from "./chat";
 import { handleAdmin } from "./admin";
@@ -106,7 +106,7 @@ async function handleRecommend(request: Request, env: Env, ctx: ExecutionContext
     return Response.json(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error.";
-    return Response.json({ error: message }, { status: 502 });
+    return Response.json({ error: message }, { status: err instanceof InputError ? 400 : 502 });
   }
 }
 

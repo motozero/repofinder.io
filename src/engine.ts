@@ -22,6 +22,8 @@ export interface EngineEnv {
   GITHUB_TOKEN?: string;
 }
 
+export class InputError extends Error {}
+
 export interface Recommendation {
   fullName: string;
   url: string;
@@ -159,7 +161,7 @@ async function recommendWithGitHub(input: string, goal: string, token?: string):
       searchQueries: [goal],
     };
   } else {
-    throw new Error("Enter a GitHub repo (URL or owner/repo) or a website URL.");
+    throw new InputError("Enter a GitHub repo (URL or owner/repo) or a website URL.");
   }
 
   const candidates = await gatherCandidates(ctx, goal, token);
@@ -255,7 +257,7 @@ async function analyzeSource(
     return { ...analysis, fullName: site.host, kind: "website" };
   }
 
-  throw new Error("Enter a GitHub repo (URL or owner/repo) or a website URL.");
+  throw new InputError("Enter a GitHub repo (URL or owner/repo) or a website URL.");
 }
 
 async function analyzeRepo(
@@ -542,8 +544,8 @@ export function normalizeUrl(input: string): string {
   const s = input.trim();
   const value = /^https?:\/\//i.test(s) ? s : `https://${s}`;
   const url = new URL(value);
-  if (!/^https?:$/.test(url.protocol)) throw new Error("Only http and https websites are supported.");
-  if (!isPublicHostname(url.hostname)) throw new Error("Private or local network addresses are not supported.");
+  if (!/^https?:$/.test(url.protocol)) throw new InputError("Only http and https websites are supported.");
+  if (!isPublicHostname(url.hostname)) throw new InputError("Private or local network addresses are not supported.");
   url.username = "";
   url.password = "";
   url.hash = "";
