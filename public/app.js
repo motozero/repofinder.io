@@ -3,6 +3,8 @@
 
 const form = document.getElementById("form");
 const submit = document.getElementById("submit");
+const exampleForm = document.getElementById("example-form");
+const exampleSubmit = document.getElementById("example-submit");
 const statusEl = document.getElementById("status");
 const sourceEl = document.getElementById("source");
 const resultsEl = document.getElementById("results");
@@ -31,17 +33,18 @@ if (form) {
     run(document.getElementById("repoUrl").value.trim(), document.getElementById("goal").value.trim());
   });
 
-  // Example buttons fill the form and run it, so a first-time visitor sees a real
-  // result without having to think of an input.
-  document.querySelectorAll(".example").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const site = btn.getAttribute("data-site");
-      const goal = btn.getAttribute("data-goal");
-      document.getElementById("repoUrl").value = site;
-      document.getElementById("goal").value = goal;
-      run(site, goal);
-      form.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+}
+
+// The example picker keeps the prompts visible while removing the wall of demo
+// buttons. It also copies the choice into the custom form so visitors can edit it.
+if (exampleForm) {
+  exampleForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const site = document.getElementById("example-source").value;
+    const goal = document.getElementById("example-goal").value;
+    document.getElementById("repoUrl").value = site;
+    document.getElementById("goal").value = goal;
+    run(site, goal);
   });
 }
 
@@ -147,6 +150,10 @@ function formatStars(n) {
 function setBusy(busy) {
   submit.disabled = busy;
   submit.textContent = busy ? "Finding repos..." : "Find repos";
+  if (exampleSubmit) {
+    exampleSubmit.disabled = busy;
+    exampleSubmit.textContent = busy ? "Finding repos..." : "Try this combination";
+  }
 }
 
 function showStatus(msg, isError) {

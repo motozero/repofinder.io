@@ -24,36 +24,9 @@
     <main class="wrap">
       <section class="hero">
         <p class="kicker">OPENAI RESPONSES API + LIVE GITHUB SIGNALS</p>
-        <h1>Find the repo that fits what you are building.</h1>
-        <p class="subtitle">Give RepoFinder a project and a goal. It returns maintained open source tools, why each one fits, and the fastest path to a proof of concept.</p>
+        <h1>Find the repo that fits what you’re building.</h1>
+        <p class="subtitle">Give RepoFinder a project and a goal.</p>
       </section>
-
-      <form id="form" class="finder">
-        <div class="field">
-          <label for="repoUrl">Project or website</label>
-          <input id="repoUrl" name="repoUrl" type="text" autocomplete="off"
-            placeholder="github.com/owner/repo" maxlength="500" required />
-        </div>
-        <div class="field">
-          <label for="goal">What do you want to add?</label>
-          <input id="goal" name="goal" type="text" autocomplete="off"
-            placeholder="evals, auth, background jobs" required maxlength="300" />
-        </div>
-        <button id="submit" type="submit">Find repos</button>
-      </form>
-
-      <div class="examples" aria-label="Example searches">
-        <span class="examples-label">Try a demo:</span>
-        <button type="button" class="example" data-site="honojs/hono" data-goal="authentication">
-          honojs/hono <span class="ex-goal">authentication</span>
-        </button>
-        <button type="button" class="example" data-site="fastapi/fastapi" data-goal="background jobs">
-          fastapi/fastapi <span class="ex-goal">background jobs</span>
-        </button>
-        <button type="button" class="example" data-site="openai/openai-node" data-goal="observability">
-          openai/openai-node <span class="ex-goal">observability</span>
-        </button>
-      </div>
 
       <div class="system-strip" aria-label="How RepoFinder works">
         <span><b>Understand</b> the source</span>
@@ -63,6 +36,78 @@
         <span><b>Rank</b> with OpenAI</span>
         <i aria-hidden="true">→</i>
         <span><b>Explain</b> the fit</span>
+      </div>
+
+      <div class="search-stack">
+        <section class="finder-panel finder-panel-primary" aria-labelledby="custom-search-title">
+          <h2 id="custom-search-title" class="panel-label">Use your own project</h2>
+          <form id="form" class="finder">
+            <div class="field">
+              <label for="repoUrl">Project or website</label>
+              <input id="repoUrl" name="repoUrl" type="text" autocomplete="off"
+                placeholder="github.com/owner/repo or yoursite.com" maxlength="500" required />
+            </div>
+            <div class="field">
+              <label for="goal">What do you want to add?</label>
+              <input id="goal" name="goal" type="text" autocomplete="off"
+                placeholder="evals, auth, background jobs" required maxlength="300" />
+            </div>
+            <button id="submit" class="primary-action" type="submit">Find repos</button>
+          </form>
+        </section>
+
+        <section class="finder-panel finder-panel-example" aria-labelledby="example-search-title">
+          <h2 id="example-search-title" class="panel-label">Or start with an example</h2>
+          <form id="example-form" class="finder">
+            <div class="field">
+              <label for="example-source">Project or website</label>
+              <select id="example-source" name="example-source">
+                <optgroup label="Projects">
+                  <option value="openai/openai-node">OpenAI Node SDK</option>
+                  <option value="calcom/cal.com">Cal.com scheduling</option>
+                  <option value="remotion-dev/remotion">Remotion video generation</option>
+                  <option value="medusajs/medusa">Medusa commerce</option>
+                  <option value="twentyhq/twenty">Twenty CRM</option>
+                  <option value="documenso/documenso">Documenso e-signatures</option>
+                </optgroup>
+                <optgroup label="Websites">
+                  <option value="https://linear.app">Linear</option>
+                  <option value="https://notion.so">Notion</option>
+                  <option value="https://figma.com">Figma</option>
+                  <option value="https://stripe.com">Stripe</option>
+                  <option value="https://posthog.com">PostHog</option>
+                  <option value="https://replit.com">Replit</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="field">
+              <label for="example-goal">What do you want to add?</label>
+              <select id="example-goal" name="example-goal">
+                <option value="production evals">Production evals</option>
+                <option value="authentication">Authentication</option>
+                <option value="background jobs">Background jobs</option>
+                <option value="observability">Observability</option>
+                <option value="payments">Payments</option>
+                <option value="semantic search">Semantic search</option>
+                <option value="file uploads">File uploads</option>
+                <option value="transactional email">Transactional email</option>
+                <option value="real-time collaboration">Real-time collaboration</option>
+                <option value="feature flags">Feature flags</option>
+                <option value="an admin dashboard">An admin dashboard</option>
+                <option value="rate limiting">Rate limiting</option>
+                <option value="webhooks">Webhooks</option>
+                <option value="product analytics">Product analytics</option>
+                <option value="accessibility">Accessibility</option>
+                <option value="internationalization">Internationalization</option>
+                <option value="caching">Caching</option>
+                <option value="queues">Queues</option>
+                <option value="end-to-end testing">End-to-end testing</option>
+                <option value="API documentation">API documentation</option>
+              </select>
+            </div>
+            <button id="example-submit" class="example-action" type="submit">Try this combination</button>
+          </form>
+        </section>
       </div>
 
       <p id="status" class="status" role="status" hidden></p>
