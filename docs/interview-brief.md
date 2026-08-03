@@ -1,5 +1,7 @@
 # Interview brief
 
+Visual rehearsal: [101-second narrated walkthrough](./video/repofinder-walkthrough.mp4).
+
 ## The story in one sentence
 
 I took a hackathon insight, rebuilt it with Codex as an OpenAI-native tool, and focused on the work that turns a prototype into a dependable, reusable customer demo.

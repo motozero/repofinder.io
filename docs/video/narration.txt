@@ -1,0 +1,11 @@
+RepoFinder is a small production demo built with Codex, OpenAI, GitHub, and Cloudflare. Give it a project and a goal, and it finds maintained open source repositories that fit what you are building.
+
+The key architecture decision is one shared recommendation engine with two thin surfaces. The browser calls a Cloudflare Worker HTTP API. Agents can call the same engine through a remote MCP tool. The engine reads live GitHub signals, then uses the OpenAI Responses API to rank candidates and explain the fit. A labeled GitHub fallback keeps the core experience useful when AI is unavailable.
+
+The production interface shows the source project, the model mode, evidence from GitHub, and concrete what, why, and how guidance. Each recommended repository opens in a new tab. A builder can also ask OpenAI a follow-up question about any result.
+
+That chat keeps the in-app answer simple, formats safe links, and always ends with a useful next question. D1 stores the full transcript and an explicit allowlist of request context. Telegram sends page, search, contact, and conversation alerts. Secrets stay in Cloudflare Worker secrets, and every Cloudflare resource is isolated under the RepoFinder service.
+
+Codex helped implement the product, pressure-test it, review the security boundaries, deploy it, and document the reasoning. The evidence is forty-five deterministic tests, a real browser QA pass, a post-deploy canary across five pages, and a lesson book designed for a one-hour skim.
+
+The result is more than a demo. It is a reusable pattern for turning an OpenAI capability into a focused developer experience with observable behavior, graceful failure, and an explanation another engineer can audit.

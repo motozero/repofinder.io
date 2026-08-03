@@ -2,6 +2,8 @@
 
 Target length: 3 minutes. Format: 16:9, 1920 by 1080. Use the exact narration in `docs/demo-script.md` or speak naturally from the prompts below.
 
+The repository also includes a [101-second narrated preview](./video/repofinder-walkthrough.mp4), its [source slides](./video/walkthrough-slides.html), and its [narration](./video/narration.txt). Use the preview to rehearse, then record the live version below in your own voice.
+
 ## Scene 1: the decision problem
 
 - Screen: RepoFinder home page.

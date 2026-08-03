@@ -93,6 +93,8 @@ The production configuration is in [`wrangler.jsonc`](./wrangler.jsonc). Never c
 
 ## Learn from the build
 
+Start with the [101-second narrated walkthrough](./docs/video/repofinder-walkthrough.mp4), then use the [interview brief](./docs/interview-brief.md) and [live demo script](./docs/demo-script.md).
+
 The [`lessons`](./lessons) directory is a compact course built around the actual product:
 
 1. [Define the demo outcome](./lessons/01-demo-outcome.md)

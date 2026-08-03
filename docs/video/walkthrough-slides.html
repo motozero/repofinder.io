@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RepoFinder walkthrough slides</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 100%; height: 100%; background: #07100f; color: #edf7f4; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body { overflow: hidden; }
+      .slide { display: none; width: 100vw; height: 100vh; padding: 6vh 7vw; background: radial-gradient(circle at 70% 10%, #12302b 0, #07100f 45%); }
+      .slide.active { display: flex; flex-direction: column; justify-content: center; }
+      .eyebrow { color: #21d6a0; font-size: 2.1vw; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+      h1 { margin: 2vh 0; max-width: 15ch; font-size: 6vw; line-height: .98; letter-spacing: -.055em; }
+      h2 { margin: 0 0 4vh; font-size: 4.2vw; line-height: 1.02; letter-spacing: -.045em; }
+      .lede { max-width: 48ch; margin: 1vh 0 0; color: #a6bbb6; font-size: 2.2vw; line-height: 1.45; }
+      .brand { position: absolute; right: 6vw; top: 6vh; font-size: 2vw; font-weight: 800; }
+      .brand span { color: #21d6a0; }
+      .flow { display: grid; grid-template-columns: 1fr .22fr 1.1fr .22fr 1fr; align-items: center; gap: 1.4vw; }
+      .box { min-height: 17vh; padding: 2.2vh 1.6vw; border: 2px solid #29413d; border-radius: 1.5vw; background: rgba(18, 31, 29, .92); }
+      .box.green { border-color: #21d6a0; }
+      .box.blue { border-color: #56a9ff; }
+      .box h3 { margin: 0 0 1.2vh; font-size: 1.8vw; }
+      .box p { margin: .7vh 0; color: #abc0bb; font-size: 1.25vw; line-height: 1.42; }
+      .arrow { color: #21d6a0; text-align: center; font-size: 4vw; }
+      .support { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4vw; margin-top: 3vh; }
+      .support .box { min-height: 12vh; }
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5vw; }
+      .metric { min-height: 23vh; padding: 2.4vh 1.8vw; border: 1px solid #29413d; border-radius: 1.5vw; background: rgba(18, 31, 29, .92); }
+      .metric strong { display: block; color: #21d6a0; font-size: 4vw; line-height: 1; }
+      .metric h3 { margin: 1.6vh 0 1vh; font-size: 1.75vw; }
+      .metric p { margin: 0; color: #abc0bb; font-size: 1.2vw; line-height: 1.45; }
+      .path { margin-top: 3.5vh; padding: 2vh 1.8vw; border-left: .45vw solid #56a9ff; background: rgba(86, 169, 255, .08); font-size: 1.65vw; line-height: 1.55; }
+      .path b { color: #71b9ff; }
+      .demo { display: grid; grid-template-columns: 1.15fr .85fr; align-items: center; gap: 4vw; }
+      .demo img { display: block; max-width: 100%; height: 82vh; margin: 0 auto; border: 1px solid #29413d; border-radius: 1.2vw; box-shadow: 0 3vh 8vh rgba(0, 0, 0, .35); object-fit: contain; }
+      .demo h2 { margin-bottom: 2vh; }
+      .demo ul { margin: 2vh 0 0; padding-left: 1.4em; color: #abc0bb; font-size: 1.55vw; line-height: 1.55; }
+      .demo li { margin: 1.2vh 0; }
+      .demo b { color: #edf7f4; }
+      nav { position: fixed; z-index: 10; right: 2vw; bottom: 2vh; display: flex; gap: .6vw; }
+      nav button { width: 2.4vw; height: 2.4vw; border: 1px solid #39504b; border-radius: 50%; background: #10201d; color: #edf7f4; font: inherit; cursor: pointer; }
+      nav button[aria-current="true"] { border-color: #21d6a0; background: #21d6a0; color: #07100f; }
+    </style>
+  </head>
+  <body>
+    <div class="brand">Repo<span>Finder</span></div>
+    <section class="slide active" data-slide="1">
+      <div class="eyebrow">Built with Codex, OpenAI, and Cloudflare</div>
+      <h1>Find the repo that fits what you are building.</h1>
+      <p class="lede">RepoFinder turns a project and goal into current, evidence-backed GitHub recommendations, then lets the builder ask OpenAI about any result.</p>
+    </section>
+
+    <section class="slide" data-slide="2">
+      <div class="eyebrow">One engine, two surfaces</div>
+      <h2>A small architecture with clean boundaries</h2>
+      <div class="flow">
+        <div class="box green"><h3>Browser</h3><p>Plain HTML, CSS, and JavaScript</p><p>Search, results, and repo chat</p></div>
+        <div class="arrow">→</div>
+        <div class="box green"><h3>Cloudflare Worker</h3><p>HTTP API and MCP server</p><p>Validation, rate limits, and static assets</p></div>
+        <div class="arrow">→</div>
+        <div class="box blue"><h3>Shared engine</h3><p>GitHub discovery and live signals</p><p>OpenAI Responses API ranking</p></div>
+      </div>
+      <div class="support">
+        <div class="box"><h3>D1</h3><p>Usage, request context, contacts, and complete chat transcripts</p></div>
+        <div class="box"><h3>Telegram</h3><p>Best-effort page, search, contact, and conversation alerts</p></div>
+        <div class="box"><h3>GitHub fallback</h3><p>A labeled degraded mode keeps the core search useful if AI is unavailable</p></div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="3">
+      <div class="demo">
+        <img src="assets/production-results.png" alt="Production RepoFinder search results" />
+        <div>
+          <div class="eyebrow">The production experience</div>
+          <h2>Evidence-backed recommendations</h2>
+          <ul>
+            <li><b>Clear provenance:</b> the UI labels OpenAI ranking and the GitHub fallback.</li>
+            <li><b>Current signals:</b> stars, recent commits, forks, contributors, and last update.</li>
+            <li><b>Actionable output:</b> what it is, why it fits, how to use it, ease, and impact.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="4">
+      <div class="demo">
+        <img src="assets/production-chat.png" alt="Production RepoFinder chat with safe links" />
+        <div>
+          <div class="eyebrow">OpenAI follow-up chat</div>
+          <h2>Simple answers that move the work forward</h2>
+          <ul>
+            <li><b>Clean output:</b> compact paragraphs, lists, code, and official links.</li>
+            <li><b>Safe navigation:</b> HTTPS links open in new tabs with opener isolation.</li>
+            <li><b>Useful momentum:</b> every answer ends with a specific next question.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-slide="5">
+      <div class="eyebrow">Evidence before claims</div>
+      <h2>Built to survive the demo path</h2>
+      <div class="grid">
+        <div class="metric"><strong>45</strong><h3>Deterministic tests</h3><p>Ranking, input classification, SSRF boundaries, safe Markdown, prompt separation, request allowlists, and Telegram chunking.</p></div>
+        <div class="metric"><strong>5</strong><h3>Production pages canaried</h3><p>Every primary page returned 200 with 195 to 312 millisecond loads after deployment.</p></div>
+        <div class="metric"><strong>2</strong><h3>Real product surfaces</h3><p>The same recommendation engine serves both the browser API and a remote MCP tool.</p></div>
+      </div>
+      <div class="path"><b>One-hour interview path:</b> architecture → shared engine → Responses API → Cloudflare isolation → chat and telemetry → secrets → the Codex build loop.</div>
+    </section>
+
+    <nav aria-label="Slides">
+      <button type="button" data-go="1" aria-current="true">1</button>
+      <button type="button" data-go="2">2</button>
+      <button type="button" data-go="3">3</button>
+      <button type="button" data-go="4">4</button>
+      <button type="button" data-go="5">5</button>
+    </nav>
+    <script>
+      function showSlide(number) {
+        document.querySelectorAll(".slide").forEach((slide) => slide.classList.toggle("active", slide.dataset.slide === String(number)));
+        document.querySelectorAll("[data-go]").forEach((button) => button.setAttribute("aria-current", String(button.dataset.go === String(number))));
+      }
+      document.querySelectorAll("[data-go]").forEach((button) => button.addEventListener("click", () => showSlide(button.dataset.go)));
+      window.showSlide = showSlide;
+    </script>
+  </body>
+</html>

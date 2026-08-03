@@ -2,6 +2,8 @@
 
 These lessons follow the product from demo intent to production deployment. Each lesson names the decision, shows where it appears in the repository, and ends with a practical check. The full set is designed for a focused 45 to 60 minute skim.
 
+Watch the [101-second narrated walkthrough](../docs/video/repofinder-walkthrough.mp4) first if you want the visual overview.
+
 1. [Define the demo outcome](./01-demo-outcome.md)
 2. [Design one engine and two surfaces](./02-one-engine-two-surfaces.md)
 3. [Steer Codex with AGENTS.md](./03-agents-md.md)
