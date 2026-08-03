@@ -17,6 +17,8 @@ GitHub search can find popular repositories. It does not understand the source p
 - One engine powers the web API and the remote MCP tool.
 - A checked-in Codex skill teaches agents when to call the tool.
 - Deterministic tests and an LLM eval harness cover different failure classes.
+- Cloudflare-native rate limits protect public model routes from spend amplification.
+- Product analytics omit raw IP addresses and user-agent strings.
 
 ## Architecture
 

@@ -1,6 +1,6 @@
 // Unit tests for the engine's deterministic logic. These run offline, with no
 // OpenAI or GitHub calls: the LLM ranking is what the eval harness measures
-// (see lessons/18-evals.md), and a unit test cannot assert on a model's output.
+// (see lessons/10-tests-and-evals.md), and a unit test cannot assert on a model's output.
 // What a unit test is good for is the boring, exact, easy-to-break plumbing:
 // parsing, classification, clamping, JSON extraction. Get these wrong and the
 // product fails in ways no eval would flag clearly.
@@ -12,6 +12,30 @@ import assert from "node:assert/strict";
 import { parseRepo } from "../src/github.ts";
 import { parseStructured } from "../src/openai.ts";
 import { looksLikeUrl, normalizeUrl, htmlToText, clamp, ecosystemLanguages, looksLikeNonTool, isPublicHostname, rankFallbackCandidates, InputError } from "../src/engine.ts";
+import { anonymousActorKey, enforceRateLimit, type RateLimitBinding } from "../src/security.ts";
+
+describe("anonymous rate limits", () => {
+  const request = (ip: string, userAgent = "test-browser") =>
+    new Request("https://repofinder.io/api/recommend", {
+      headers: { "cf-connecting-ip": ip, "user-agent": userAgent },
+    });
+
+  it("creates a stable opaque key without exposing the source address", async () => {
+    const first = await anonymousActorKey(request("203.0.113.42"), "recommend");
+    const second = await anonymousActorKey(request("203.0.113.42"), "recommend");
+    const other = await anonymousActorKey(request("203.0.113.43"), "recommend");
+    assert.equal(first, second);
+    assert.notEqual(first, other);
+    assert.doesNotMatch(first, /203\.0\.113/);
+  });
+
+  it("returns a 429 with retry guidance when the binding rejects a request", async () => {
+    const limiter = { limit: async () => ({ success: false }) } as RateLimitBinding;
+    const response = await enforceRateLimit(limiter, request("203.0.113.42"), "recommend");
+    assert.equal(response?.status, 429);
+    assert.equal(response?.headers.get("retry-after"), "60");
+  });
+});
 
 describe("parseRepo", () => {
   it("parses a full GitHub URL", () => {

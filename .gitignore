@@ -5,6 +5,5 @@ dist/
 evals/.cache/
 *.log
 .DS_Store
-worker-configuration.d.ts
 local.md
 .gstack/

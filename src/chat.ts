@@ -7,6 +7,7 @@
 import { parseRepo, getRepo, getReadme } from "./github";
 import { callOpenAIMessages, MODELS, type ChatTurn } from "./openai";
 import { visitor, notify, tgEsc, locationLine, networkLine, type Visitor } from "./telemetry";
+import { htmlSecurityHeaders } from "./security";
 
 export interface ChatEnv {
   OPENAI_API_KEY?: string;
@@ -39,9 +40,9 @@ export async function handleEvent(request: Request, env: ChatEnv, ctx: Execution
     (async () => {
       try {
         await env.DB.prepare(
-          "INSERT INTO events (created_at, visitor_id, type, repo, input, goal, ip, user_agent, browser, os, asn, as_org, country, city, region) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "INSERT INTO events (created_at, visitor_id, type, repo, input, goal, browser, os, asn, as_org, country, city, region) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
         )
-          .bind(now(), vId, type, repo, input, goal, v.ip, v.ua, v.browser, v.os, v.asn, v.asOrg, v.country, v.city, v.region)
+          .bind(now(), vId, type, repo, input, goal, v.browser, v.os, v.asn, v.asOrg, v.country, v.city, v.region)
           .run();
       } catch (err) {
         console.log("d1 events error", err instanceof Error ? err.message : String(err));
@@ -94,9 +95,9 @@ export async function handleChat(request: Request, env: ChatEnv, ctx: ExecutionC
     isNew = !existing;
     if (isNew) {
       await env.DB.prepare(
-        "INSERT INTO chat_sessions (id, created_at, visitor_id, repo, input, goal, ip, user_agent, browser, os, asn, as_org, country, city, region) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO chat_sessions (id, created_at, visitor_id, repo, input, goal, browser, os, asn, as_org, country, city, region) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
       )
-        .bind(sessionId, now(), vId, repo, input, goal, v.ip, v.ua, v.browser, v.os, v.asn, v.asOrg, v.country, v.city, v.region)
+        .bind(sessionId, now(), vId, repo, input, goal, v.browser, v.os, v.asn, v.asOrg, v.country, v.city, v.region)
         .run();
     }
   } catch (err) {
@@ -213,7 +214,7 @@ export async function renderTranscript(sessionId: string, env: ChatEnv): Promise
     return new Response("Transcript not found.", { status: 404, headers: { "content-type": "text/plain" } });
   }
   return new Response(transcriptHtml(session, messages), {
-    headers: { "content-type": "text/html; charset=utf-8" },
+    headers: htmlSecurityHeaders(),
   });
 }
 

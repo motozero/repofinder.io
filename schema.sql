@@ -9,8 +9,6 @@ CREATE TABLE IF NOT EXISTS messages (
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   message TEXT NOT NULL,
-  ip TEXT,
-  user_agent TEXT,
   asn INTEGER,
   as_org TEXT,
   country TEXT,
@@ -24,8 +22,6 @@ CREATE TABLE IF NOT EXISTS usage (
   created_at TEXT NOT NULL,
   input TEXT NOT NULL,
   goal TEXT NOT NULL,
-  ip TEXT,
-  user_agent TEXT,
   browser TEXT,
   os TEXT,
   asn INTEGER,
@@ -41,7 +37,7 @@ CREATE INDEX IF NOT EXISTS idx_usage_created ON usage(created_at);
 CREATE INDEX IF NOT EXISTS idx_messages_created ON messages(created_at);
 
 -- Anonymous interaction events (e.g. clicking a recommended repo). visitor_id is
--- a random id kept in the browser, so a visitor is tracked with no email or PII.
+-- a random id kept in the browser. Raw IP addresses and user agents are not stored.
 CREATE TABLE IF NOT EXISTS events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   created_at TEXT NOT NULL,
@@ -50,7 +46,7 @@ CREATE TABLE IF NOT EXISTS events (
   repo TEXT,
   input TEXT,
   goal TEXT,
-  ip TEXT, user_agent TEXT, browser TEXT, os TEXT,
+  browser TEXT, os TEXT,
   asn INTEGER, as_org TEXT, country TEXT, city TEXT, region TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_events_created ON events(created_at);
@@ -64,7 +60,7 @@ CREATE TABLE IF NOT EXISTS chat_sessions (
   visitor_id TEXT,
   repo TEXT NOT NULL,
   input TEXT, goal TEXT,
-  ip TEXT, user_agent TEXT, browser TEXT, os TEXT,
+  browser TEXT, os TEXT,
   asn INTEGER, as_org TEXT, country TEXT, city TEXT, region TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_chat_sessions_created ON chat_sessions(created_at);

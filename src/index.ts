@@ -1,15 +1,16 @@
 import { recommend, InputError, type EngineEnv } from "./engine";
-import { RepoFinderMCP } from "./mcp";
+import { handleMcpRequest } from "./mcp";
 import { handleEvent, handleChat, renderTranscript } from "./chat";
 import { handleAdmin } from "./admin";
 import { visitor, notify, tgEsc, locationLine, networkLine, type Visitor } from "./telemetry";
-
-export { RepoFinderMCP };
+import { enforceRateLimit, type RateLimitBinding } from "./security";
 
 export interface Env extends EngineEnv {
   ASSETS: Fetcher;
-  MCP_OBJECT: DurableObjectNamespace;
   DB: D1Database;
+  AI_RATE_LIMITER: RateLimitBinding;
+  WRITE_RATE_LIMITER: RateLimitBinding;
+  ADMIN_RATE_LIMITER: RateLimitBinding;
   // Contact + notifications. Set with `wrangler secret put`, kept out of the repo.
   RESEND_API_KEY?: string;
   CONTACT_TO_EMAIL?: string;
@@ -23,12 +24,11 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
-    // Surface 2: our own MCP server (Streamable HTTP at /mcp, SSE at /sse).
+    // Surface 2: our own stateless MCP server over Streamable HTTP.
     if (url.pathname === "/mcp") {
-      return RepoFinderMCP.serve("/mcp").fetch(request, env, ctx);
-    }
-    if (url.pathname === "/sse" || url.pathname === "/sse/message") {
-      return RepoFinderMCP.serveSSE("/sse").fetch(request, env, ctx);
+      const limited = await enforceRateLimit(env.AI_RATE_LIMITER, request, "mcp");
+      if (limited) return limited;
+      return handleMcpRequest(request, env, ctx);
     }
 
     if (url.pathname === "/api/health") {
@@ -41,18 +41,26 @@ export default {
     }
 
     if (url.pathname === "/api/recommend" && request.method === "POST") {
+      const limited = await enforceRateLimit(env.AI_RATE_LIMITER, request, "recommend");
+      if (limited) return limited;
       return handleRecommend(request, env, ctx);
     }
 
     if (url.pathname === "/api/contact" && request.method === "POST") {
+      const limited = await enforceRateLimit(env.WRITE_RATE_LIMITER, request, "contact");
+      if (limited) return limited;
       return handleContact(request, env, ctx);
     }
 
     if (url.pathname === "/api/event" && request.method === "POST") {
+      const limited = await enforceRateLimit(env.WRITE_RATE_LIMITER, request, "event");
+      if (limited) return limited;
       return handleEvent(request, env, ctx);
     }
 
     if (url.pathname === "/api/chat" && request.method === "POST") {
+      const limited = await enforceRateLimit(env.AI_RATE_LIMITER, request, "chat");
+      if (limited) return limited;
       return handleChat(request, env, ctx);
     }
 
@@ -68,6 +76,8 @@ export default {
 
     // Password-protected activity dashboard.
     if (url.pathname === "/admin" && request.method === "GET") {
+      const limited = await enforceRateLimit(env.ADMIN_RATE_LIMITER, request, "admin");
+      if (limited) return limited;
       return handleAdmin(request, env);
     }
 
@@ -143,9 +153,9 @@ async function handleContact(request: Request, env: Env, ctx: ExecutionContext):
   if (env.DB) {
     try {
       await env.DB.prepare(
-        "INSERT INTO messages (created_at, name, email, message, ip, user_agent, asn, as_org, country, city, region) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO messages (created_at, name, email, message, asn, as_org, country, city, region) VALUES (?,?,?,?,?,?,?,?,?)",
       )
-        .bind(new Date().toISOString(), name, email, message, v.ip, v.ua, v.asn, v.asOrg, v.country, v.city, v.region)
+        .bind(new Date().toISOString(), name, email, message, v.asn, v.asOrg, v.country, v.city, v.region)
         .run();
       stored = true;
     } catch (err) {
@@ -176,9 +186,9 @@ async function logUsage(env: Env, input: string, goal: string, v: Visitor): Prom
   if (!env.DB) return;
   try {
     await env.DB.prepare(
-      "INSERT INTO usage (created_at, input, goal, ip, user_agent, browser, os, asn, as_org, country, city, region, timezone, colo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO usage (created_at, input, goal, browser, os, asn, as_org, country, city, region, timezone, colo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
     )
-      .bind(new Date().toISOString(), input, goal, v.ip, v.ua, v.browser, v.os, v.asn, v.asOrg, v.country, v.city, v.region, v.timezone, v.colo)
+      .bind(new Date().toISOString(), input, goal, v.browser, v.os, v.asn, v.asOrg, v.country, v.city, v.region, v.timezone, v.colo)
       .run();
   } catch (err) {
     console.log("d1 usage error", err instanceof Error ? err.message : String(err));
@@ -220,7 +230,6 @@ function usageText(input: string, goal: string, v: Visitor): string {
     `Network: ${tgEsc(networkLine(v))}`,
     `Device: ${tgEsc(v.browser)} on ${tgEsc(v.os)}`,
     v.colo ? `Edge: ${tgEsc(v.colo)}` : "",
-    v.ip ? `IP: ${tgEsc(v.ip)}` : "",
   ]
     .filter(Boolean)
     .join("\n");

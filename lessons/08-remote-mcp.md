@@ -2,7 +2,7 @@
 
 MCP lets an agent discover and call RepoFinder as a tool. The remote server exposes `recommend_repos` over Streamable HTTP at `/mcp`.
 
-The tool accepts two bounded strings and returns the same typed result as the browser API. It does not contain a second prompt or ranking algorithm. The Cloudflare Durable Object supplies the stateful protocol lifecycle required by the server framework.
+The tool accepts two bounded strings and returns the same typed result as the browser API. It does not contain a second prompt or ranking algorithm. The current Agents SDK stateless handler serves Streamable HTTP without a Durable Object because RepoFinder does not need per-session state.
 
 The checked-in `.codex/config.toml` points Codex at the production endpoint. The companion skill adds workflow guidance. Keeping protocol and judgment separate makes each easier to reuse.
 

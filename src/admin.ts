@@ -2,6 +2,8 @@
 // contact messages, so the owner can see activity without clicking each Telegram
 // link. HTTP Basic auth against the ADMIN_PASSWORD secret.
 
+import { htmlSecurityHeaders } from "./security";
+
 export interface AdminEnv {
   DB: D1Database;
   ADMIN_PASSWORD?: string;
@@ -32,7 +34,7 @@ export async function handleAdmin(request: Request, env: AdminEnv): Promise<Resp
   ]);
 
   return new Response(adminHtml({ chats, clicks, searches, contacts }), {
-    headers: { "content-type": "text/html; charset=utf-8" },
+    headers: htmlSecurityHeaders(),
   });
 }
 
@@ -123,7 +125,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .counts b{color:var(--ink)}
 </style></head><body><div class="wrap">
 <h1>RepoFinder admin</h1>
-<p class="sub">Anonymous activity. No emails required.</p>
+<p class="sub">Anonymous product activity. Contact messages include only the details a visitor submits.</p>
 <div class="counts"><span><b>${d.chats.length}</b> chats</span><span><b>${d.clicks.length}</b> repo clicks</span><span><b>${d.searches.length}</b> searches</span><span><b>${d.contacts.length}</b> messages</span></div>
 ${section("Chats", ["When", "Repo", "Msgs", "Visitor", "Where", "Browser", ""], chatRows, "No chats yet.")}
 ${section("Repo clicks", ["When", "Repo", "Visitor", "Where", "Browser"], clickRows, "No clicks yet.")}

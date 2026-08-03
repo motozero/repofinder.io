@@ -13,7 +13,7 @@ flowchart LR
 
 `src/engine.ts` owns analysis, search, filtering, ranking, explanations, metrics, and fallback behavior. `src/index.ts` and `src/mcp.ts` validate input, call the engine, and shape transport responses.
 
-This boundary creates leverage. Prompt tuning, security fixes, and eval improvements land once. A third surface, such as a CLI, can reuse the same function without copying product logic.
+This boundary keeps changes focused. Prompt tuning, security fixes, and eval improvements land once. A third surface, such as a CLI, can reuse the same function without copying product logic.
 
 ## Try it
 
