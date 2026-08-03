@@ -134,7 +134,7 @@ body {
 .finder-panel-example .panel-label { color: var(--blue); }
 .finder {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 184px;
   gap: 12px;
   align-items: end;
 }
@@ -159,6 +159,7 @@ body {
 .finder-panel-example .field select:focus { border-color: var(--blue); }
 .primary-action,
 .example-action {
+  width: 100%;
   min-height: 44px;
   background: var(--green);
   color: #04130d;
@@ -447,10 +448,13 @@ body {
 }
 .chat-note { margin: 0; padding: 4px 16px 14px; font-size: 11px; color: var(--muted); }
 
-@media (max-width: 640px) {
+@media (max-width: 800px) {
   .finder { grid-template-columns: 1fr; }
-  .finder-panel { padding: 15px 16px 16px; }
   .primary-action, .example-action { width: 100%; }
+}
+
+@media (max-width: 640px) {
+  .finder-panel { padding: 15px 16px 16px; }
   .navlinks { gap: 14px; }
   .system-strip {
     display: grid;
