@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { isDocumentVisit, logRequest, parseUA, requestSnapshot, visitor } from "../src/telemetry.ts";
+import { isDocumentVisit, logRequest, parseUA, requestSnapshot, splitTelegramText, visitor } from "../src/telemetry.ts";
 
 function withCf(request: Request, cf: Record<string, unknown>): Request {
   Object.defineProperty(request, "cf", { value: cf, configurable: true });
@@ -71,5 +71,13 @@ describe("request telemetry allowlist", () => {
     assert.equal(isDocumentVisit(new Request("https://repofinder.io/styles.css", { headers: { accept: "text/css" } })), false);
     assert.equal(isDocumentVisit(new Request("https://repofinder.io/api/health", { headers: { accept: "text/html" } })), false);
     assert.equal(isDocumentVisit(new Request("https://repofinder.io/", { method: "POST", headers: { accept: "text/html" } })), false);
+  });
+
+  it("splits long Telegram payloads without dropping content", () => {
+    const message = Array.from({ length: 900 }, (_, index) => `line-${index}`).join("\n");
+    const chunks = splitTelegramText(message);
+    assert.ok(chunks.length > 1);
+    assert.ok(chunks.every((chunk) => chunk.length <= 3500));
+    assert.equal(chunks.join("\n"), message);
   });
 });

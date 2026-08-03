@@ -5,6 +5,7 @@ import { handleAdmin } from "./admin";
 import {
   visitor,
   notify,
+  notifyPlain,
   logRequest,
   isDocumentVisit,
   pageVisitText,
@@ -185,7 +186,7 @@ async function handleContact(request: Request, env: Env, ctx: ExecutionContext):
   }
 
   const emailPromise = sendContactEmail(env, name, email, message);
-  const tgPromise = notify(env, contactText(request, name, email, message, v));
+  const tgPromise = notifyContact(env, request, name, email, message, v);
 
   if (stored) {
     ctx.waitUntil(Promise.allSettled([emailPromise, tgPromise]));
@@ -253,12 +254,15 @@ function usageText(request: Request, input: string, goal: string, v: Visitor): s
     .join("\n");
 }
 
-function contactText(request: Request, name: string, email: string, message: string, v: Visitor): string {
+function contactText(request: Request, name: string, email: string, v: Visitor): string {
   return [
     "✉️ <b>NEW REPOFINDER CONTACT</b>",
     `👤 <b>From:</b> ${tgEsc(name)} (${tgEsc(email)})`,
-    "",
-    tgEsc(message),
     requestIntelHtml(request, v),
   ].join("\n");
+}
+
+async function notifyContact(env: Env, request: Request, name: string, email: string, message: string, v: Visitor): Promise<void> {
+  await notify(env, contactText(request, name, email, v));
+  await notifyPlain(env, `Contact message from ${name} <${email}>\n\n${message}`);
 }

@@ -316,7 +316,7 @@ export async function notify(env: NotifyEnv, text: string): Promise<void> {
   await sendTelegram(env, text, "HTML");
 }
 
-function splitTelegramText(text: string, max = 3500): string[] {
+export function splitTelegramText(text: string, max = 3500): string[] {
   const chunks: string[] = [];
   let remaining = text.trim();
   while (remaining.length > max) {

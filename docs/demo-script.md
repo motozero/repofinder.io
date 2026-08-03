@@ -24,7 +24,7 @@ Explain the `mode` field and labeled GitHub fallback. The experience still retur
 
 ## Close on production readiness
 
-Show the strict schemas, 44 deterministic tests, model evals, SSRF checks, request telemetry allowlist, Cloudflare resource isolation, and public lesson book. End with: “The demo is the visible surface. The reusable accelerator is the architecture and the operating discipline behind it.”
+Show the strict schemas, 45 deterministic tests, model evals, SSRF checks, request telemetry allowlist, Cloudflare resource isolation, and public lesson book. End with: “The demo is the visible surface. The reusable accelerator is the architecture and the operating discipline behind it.”
 
 ## Shot-by-shot talk track
 
