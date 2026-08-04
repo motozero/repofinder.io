@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A short RepoFinder product demo that turns an AI video avatar idea into a focused experiment." />
+    <title>RepoFinder product demo V3</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/slides-v3/slides.css" />
+  </head>
+  <body>
+    <main class="deck" aria-label="RepoFinder product demo slide deck">
+      <header class="deck-header">
+        <a class="brand" href="/" target="_blank" rel="noopener" aria-label="Open RepoFinder in a new tab">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Repo<span>Finder</span></span>
+        </a>
+        <div class="deck-actions">
+          <span class="version-label">Story V3</span>
+          <button class="text-button" id="script-toggle" type="button" aria-controls="script-panel" aria-expanded="false">Script</button>
+          <a class="text-button" href="/" target="_blank" rel="noopener">Live demo ↗</a>
+        </div>
+      </header>
+
+      <div class="slides" aria-live="polite">
+        <section class="slide active idea-slide" data-slide="1" aria-labelledby="slide-1-title">
+          <div class="idea-layout">
+            <div class="portfolio-shot screenshot-frame">
+              <img src="/slides-v3/assets/portfolio-home.png" alt="The letsgochristo.com home page" />
+              <span class="focus-box portfolio-focus" aria-hidden="true"></span>
+              <svg class="annotation-arrow portfolio-arrow" viewBox="0 0 320 170" aria-hidden="true">
+                <path d="M32 28 C126 22 166 72 254 122" />
+                <path d="M235 120 L254 122 L246 104" />
+              </svg>
+            </div>
+            <div class="idea-copy">
+              <p class="eyebrow mint">The idea</p>
+              <h1 id="slide-1-title">What if my portfolio could introduce me?</h1>
+              <p class="lede">Let visitors meet Christo without booking a call.</p>
+              <aside class="sticky-note primary-sticky">
+                <span>Goal</span>
+                <strong>Add an AI video avatar</strong>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide input-slide" data-slide="2" aria-labelledby="slide-2-title">
+          <div class="title-row">
+            <div>
+              <p class="eyebrow mint">Give the idea context</p>
+              <h2 id="slide-2-title">Start with the actual site and outcome.</h2>
+            </div>
+            <aside class="sticky-note compact-sticky">
+              <strong>The site and goal change the answer.</strong>
+            </aside>
+          </div>
+          <div class="form-shot screenshot-frame">
+            <img src="/slides-v3/assets/repofinder-input-crop.png" alt="RepoFinder with letsgochristo.com and AI video avatar entered" />
+            <span class="focus-box form-focus" aria-hidden="true"></span>
+            <span class="focus-box button-focus" aria-hidden="true"></span>
+            <svg class="annotation-arrow form-arrow" viewBox="0 0 300 190" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M268 25 C264 76 233 134 190 178" />
+              <path d="M207 165 L190 178 L192 157" />
+            </svg>
+            <span class="press-label">Press here</span>
+          </div>
+        </section>
+
+        <section class="slide tradeoff-slide" data-slide="3" aria-labelledby="slide-3-title">
+          <div class="tradeoff-layout">
+            <div class="card-shot screenshot-frame">
+              <img src="/slides-v3/assets/first-result-card.png" alt="The first RepoFinder result, Duix-Avatar" />
+              <span class="focus-box star-focus" aria-hidden="true"></span>
+              <span class="focus-box ease-focus" aria-hidden="true"></span>
+            </div>
+            <div class="tradeoff-copy">
+              <p class="eyebrow yellow">The first result</p>
+              <h2 id="slide-3-title">The ranking reveals the tradeoff.</h2>
+              <div class="fact-stack" aria-label="Duix-Avatar tradeoffs">
+                <article><span>Popularity</span><strong>14.3k stars</strong></article>
+                <article><span>Control</span><strong>Self-hosted</strong></article>
+                <article class="friction"><span>Setup</span><strong>GPU service required</strong></article>
+              </div>
+              <aside class="sticky-note tradeoff-sticky">
+                <strong>Powerful is not the same as easy.</strong>
+            <svg viewBox="0 0 220 90" aria-hidden="true"><path d="M204 18 C158 18 104 38 28 72" /><path d="M44 72 L28 72 L34 57" /></svg>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide constraint-slide" data-slide="4" aria-labelledby="slide-4-title">
+          <div class="constraint-bg screenshot-frame">
+            <img src="/slides-v3/assets/repofinder-results.png" alt="RepoFinder avatar results dimmed behind the follow-up question" />
+          </div>
+          <div class="constraint-content">
+            <p class="eyebrow mint">Add the constraint</p>
+            <h2 id="slide-4-title">Tell it what the star count cannot know.</h2>
+            <blockquote>
+              “I like this idea, but I care more about <mark>ease of use</mark>. Can you suggest a couple of easier options, even if I have to <mark>pay</mark> for them?”
+            </blockquote>
+            <aside class="sticky-note constraint-sticky"><strong>This is the real requirement.</strong></aside>
+          </div>
+        </section>
+
+        <section class="slide answer-slide" data-slide="5" aria-labelledby="slide-5-title">
+          <div class="answer-layout">
+            <div class="answer-copy">
+              <p class="eyebrow mint">Watch the answer change</p>
+              <h2 id="slide-5-title">Hosted tools fit this project better.</h2>
+              <div class="vendor-list" aria-label="Easier hosted options">
+                <article><strong>HeyGen</strong><span>Fast, personable avatar video</span></article>
+                <article><strong>Synthesia</strong><span>Polished training and demos</span></article>
+                <article><strong>Captions</strong><span>Creator-first editing and dubbing</span></article>
+              </div>
+              <aside class="sticky-note answer-sticky"><strong>My priority changed the recommendation.</strong></aside>
+            </div>
+            <div class="chat-shot screenshot-frame">
+              <img src="/slides-v3/assets/chat-refined-box.png" alt="RepoFinder recommending HeyGen, Synthesia, and Captions after the ease-of-use follow-up" />
+              <span class="focus-box answer-focus" aria-hidden="true"></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide experiment-slide" data-slide="6" aria-labelledby="slide-6-title">
+          <p class="eyebrow blue">Turn the answer into an experiment</p>
+          <h2 id="slide-6-title">A next step, not another tab.</h2>
+          <div class="decision-flow" aria-label="From need to focused test">
+            <article class="decision-node">
+              <span>1</span><small>Need</small><strong>Let visitors meet Christo</strong>
+            </article>
+            <i>→</i>
+            <article class="decision-node">
+              <span>2</span><small>Constraint</small><strong>Ease first, paid is fine</strong>
+            </article>
+            <i>→</i>
+            <article class="decision-node selected-node">
+              <span>3</span><small>Choice</small><strong>Prototype with HeyGen</strong>
+            </article>
+            <i>→</i>
+            <article class="decision-node test-node">
+              <span>4</span><small>Test</small><strong>One page, then measure engagement</strong>
+            </article>
+          </div>
+          <aside class="sticky-note experiment-sticky">
+            <strong>Test the experience before the architecture.</strong>
+            <svg viewBox="0 0 220 300" aria-hidden="true"><path d="M30 282 C22 196 62 104 126 24" /><path d="M106 32 L126 24 L124 46" /></svg>
+          </aside>
+        </section>
+
+        <section class="slide surfaces-slide" data-slide="7" aria-labelledby="slide-7-title">
+          <p class="eyebrow blue">One capability, two ways to work</p>
+          <h2 id="slide-7-title">Humans refine. Agents repeat.</h2>
+          <div class="surface-flow">
+            <article class="surface-card human-card">
+              <span class="surface-icon" aria-hidden="true">◉</span>
+              <small>Browser</small>
+              <h3>Explore through conversation</h3>
+              <p>Search, inspect, add taste, and ask follow-up questions.</p>
+              <div class="mini-chat"><span>Ease matters more.</span><span>Try HeyGen first.</span></div>
+            </article>
+            <div class="shared-engine">
+              <small>Same engine</small>
+              <strong>RepoFinder</strong>
+              <span>context + evidence + reasoning</span>
+            </div>
+            <article class="surface-card agent-card">
+              <span class="surface-icon" aria-hidden="true">⌁</span>
+              <small>MCP</small>
+              <h3>Reuse structured recommendations</h3>
+              <p>An agent calls one tool and continues its own workflow.</p>
+              <pre><code>recommend_repos({
+  source,
+  goal
+})</code></pre>
+            </article>
+            <svg class="surface-arrows" viewBox="0 0 1100 250" aria-hidden="true">
+              <path class="mint-line" d="M328 126 C390 126 415 126 474 126" />
+              <path class="blue-line" d="M772 126 C710 126 685 126 626 126" />
+            </svg>
+          </div>
+          <aside class="sticky-note surfaces-sticky"><strong>Conversation for people. Structured output for agents.</strong></aside>
+        </section>
+
+        <section class="slide value-slide" data-slide="8" aria-labelledby="slide-8-title">
+          <p class="eyebrow mint">The value</p>
+          <h2 id="slide-8-title">From an idea to a focused experiment.</h2>
+          <div class="result-line" aria-label="The final focused experiment">
+            <span>letsgochristo.com</span><i>+</i><span>AI video avatar</span><i>→</i><strong>HeyGen prototype</strong>
+          </div>
+          <div class="value-grid">
+            <article><span>01</span><strong>Less tab hopping</strong><p>Start with a shortlist shaped by the real project.</p></article>
+            <article><span>02</span><strong>Fewer wrong-fit integrations</strong><p>See implementation friction before committing.</p></article>
+            <article><span>03</span><strong>Faster path to a test</strong><p>Turn the conversation into one focused next step.</p></article>
+          </div>
+          <div class="close-actions">
+            <a href="https://repofinder.io" target="_blank" rel="noopener">Try RepoFinder ↗</a>
+            <a class="secondary-link" href="https://repofinder.io/mcp" target="_blank" rel="noopener">Use the MCP tool ↗</a>
+          </div>
+        </section>
+      </div>
+
+      <aside id="script-panel" class="script-panel" aria-hidden="true">
+        <div class="script-head"><span>Narration for this scene</span><button id="script-close" type="button" aria-label="Close script">×</button></div>
+        <p id="script-time"></p>
+        <blockquote id="script-copy"></blockquote>
+      </aside>
+
+      <footer class="deck-footer">
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+        <button class="nav-button" id="previous" type="button" aria-label="Previous slide">←</button>
+        <span class="counter"><strong id="current-slide">01</strong><span>/ 08</span></span>
+        <button class="nav-button" id="next" type="button" aria-label="Next slide">→</button>
+      </footer>
+    </main>
+    <script src="/slides-v3/slides.js"></script>
+  </body>
+</html>
