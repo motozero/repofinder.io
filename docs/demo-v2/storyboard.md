@@ -29,9 +29,8 @@ The demo follows a “last thing first” structure:
 
 - Full-bleed crop of `05-chat-refinement.png`.
 - Left title: “Your first result is not your final decision.”
-- Mint ring around “Not really.”
-- Blue brackets around OpenAI Evals, Langfuse, and Braintrust.
-- Yellow underline below the three-step practical stack.
+- Three compact cues outside the screenshot: honest mismatch, lighter options, focused next step.
+- No overlay needs to align with a line inside the chat.
 
 ### 2. Stars are a signal
 
@@ -42,66 +41,56 @@ The demo follows a “last thing first” structure:
 
 ### 3. Start with context
 
-- Screenshot: `01-start.png`.
-- Mint arrow to the project field.
-- Blue arrow to the goal field.
-- Callout: “Name the thing you are building and the outcome you need.”
+- Screenshot: `01-start-filled.png`.
+- A stable row above the screenshot names the project, goal, and green Find repos action.
+- Only the primary form appears in the demo story. The example chooser remains available in the product for onboarding.
 
-### 4. One action
-
-- Same screenshot, slightly zoomed.
-- Blue halo around “Try this combination.”
-- One click marker.
-- Callout: “The shortest path to value.”
-
-### 5. Evidence-backed starting point
+### 4. Evidence-backed starting point
 
 - Screenshot: `02-results.png`.
-- Yellow highlight on “OpenAI ranked 4 candidates.”
-- Mint brackets around the candidate cards.
-- Callout: “Live signals plus reasoning for this task.”
+- Show the result at a readable scale without rectangles that pretend to point at responsive content.
+- The title states the takeaway: live signals plus reasoning for this task.
 
-### 6. Understand the fit
+### 5. Understand the fit
 
 - Stylized recommendation card reconstructed from the live UI.
-- Five labeled zones: What, Why, How, Ease, Impact.
+- The card itself labels What, Why, How, Ease, and Impact.
 - Bottom evidence strip: updated, commits, contributors, forks.
 - Message: “Evidence stays visible beside the explanation.”
 
-### 7. Go deeper
+### 6. Go deeper
 
 - Screenshot: `03-chat-open.png`.
 - Mint arrow to the question field.
 - Question bubble: “How would I test this in one afternoon?”
 - Callout: “Turn a candidate into an experiment.”
 
-### 8. Make it practical
+### 7. Make it practical
 
 - Screenshot: `04-chat-first-answer.png`.
-- Three numbered markers over the suggested test plan.
-- Blue bracket around “Fit and tradeoffs.”
+- Three numbered steps remain outside the screenshot.
 - Callout: “A concrete next move, not another search result.”
 
-### 9. Add your taste
+### 8. Add your taste
 
 - Darkened chat screenshot as background.
 - Large user bubble containing the real lightweight TypeScript question.
 - The words “lightweight,” “TypeScript,” and “directly” receive mint emphasis.
 
-### 10. Watch the answer change
+### 9. Watch the answer change
 
 - Screenshot: `05-chat-refinement.png`.
 - Reveal in three beats: honest mismatch, lighter alternatives, focused stack.
 - Closing callout: “Your constraints changed the recommendation.”
 
-### 11. One capability, two ways to work
+### 10. One capability, two ways to work
 
 - Left, mint: “Human” with a browser window and conversation loop.
 - Right, blue: “Agent” with an MCP tool call and structured result card.
 - Accurate distinction: dedicated follow-up chat is shown only on the browser side.
 - Shared center: “RepoFinder recommendation capability.”
 
-### 12. Move forward faster
+### 11. Move forward faster
 
 - Product flow diagram:
   `Project + goal → Evidence-backed shortlist → Ask questions → Add constraints and taste → Refined recommendation → Focused next step`

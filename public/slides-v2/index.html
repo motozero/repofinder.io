@@ -27,12 +27,14 @@
             <p class="eyebrow mint">The changed decision</p>
             <h1 id="slide-1-title">Your first result is not your final decision.</h1>
             <p class="lede">A useful recommendation should change when your constraints change.</p>
+            <ul class="outcome-points" aria-label="How the answer improved">
+              <li><span class="mint-dot"></span>Honest mismatch</li>
+              <li><span class="blue-dot"></span>Lighter options</li>
+              <li><span class="yellow-dot"></span>Focused next step</li>
+            </ul>
           </div>
           <div class="screen outcome-screen">
             <img src="/slides-v2/assets/05-chat-refinement.png" alt="RepoFinder chat explaining that the original result is too heavy and suggesting lighter alternatives" />
-            <div class="spotlight spotlight-mismatch"><span>Honest mismatch</span></div>
-            <div class="spotlight spotlight-options"><span>Lighter options</span></div>
-            <div class="spotlight spotlight-stack"><span>Focused next step</span></div>
           </div>
         </section>
 
@@ -58,54 +60,35 @@
               <p class="eyebrow mint">Start with context</p>
               <h2 id="slide-3-title">Name the project and the outcome.</h2>
             </div>
-            <p class="slide-note">RepoFinder needs both to explain fit.</p>
+            <p class="slide-note">One clear path from context to recommendation.</p>
           </div>
-          <div class="screen wide-screen">
-            <img src="/slides-v2/assets/01-start.png" alt="RepoFinder start screen with project and goal fields" />
-            <div class="field-highlight project-highlight"></div>
-            <div class="field-highlight goal-highlight blue-outline"></div>
-            <div class="arrow-callout project-callout mint-callout"><span>1</span> The thing you are building</div>
-            <div class="arrow-callout goal-callout blue-callout"><span>2</span> The outcome you need</div>
-            <svg class="callout-arrow project-arrow" viewBox="0 0 180 80" aria-hidden="true"><path d="M8 12 C 62 12, 98 24, 166 68" /><path d="M149 66 L166 68 L158 52" /></svg>
-            <svg class="callout-arrow goal-arrow blue-stroke" viewBox="0 0 180 80" aria-hidden="true"><path d="M8 12 C 62 12, 98 24, 166 68" /><path d="M149 66 L166 68 L158 52" /></svg>
+          <div class="context-steps" aria-label="The three steps to start a recommendation">
+            <span><b>1</b><small>Project</small>openai/openai-node</span>
+            <span><b>2</b><small>Goal</small>production evals</span>
+            <span class="press-step"><b>3</b><small>Press</small>Find repos</span>
           </div>
-        </section>
-
-        <section class="slide action-slide" data-slide="4" aria-labelledby="slide-4-title">
-          <div class="copy copy-left narrow-copy">
-            <p class="eyebrow blue">The shortest path</p>
-            <h2 id="slide-4-title">One action gets to value.</h2>
-            <p class="lede">No setup wizard. No ranking controls. Give RepoFinder context, then let it work.</p>
-          </div>
-          <div class="screen action-screen">
-            <img src="/slides-v2/assets/01-start.png" alt="RepoFinder start screen focused on the Try this combination button" />
-            <div class="button-pulse" aria-hidden="true"></div>
-            <div class="cursor" aria-hidden="true">↖</div>
-            <div class="action-label">Press here</div>
+          <div class="screen wide-screen context-screen">
+            <img src="/slides-v2/assets/01-start-filled.png" alt="RepoFinder with the OpenAI Node SDK and production evaluations entered in the primary form" />
           </div>
         </section>
 
-        <section class="slide results-slide" data-slide="5" aria-labelledby="slide-5-title">
+        <section class="slide results-slide" data-slide="4" aria-labelledby="slide-4-title">
           <div class="slide-title-row compact-title">
             <div>
               <p class="eyebrow yellow">Evidence-backed starting point</p>
-              <h2 id="slide-5-title">Ranked for this task.</h2>
+              <h2 id="slide-4-title">Ranked for this task.</h2>
             </div>
             <p class="slide-note">Live GitHub signals stay visible beside OpenAI reasoning.</p>
           </div>
           <div class="screen results-screen">
             <img src="/slides-v2/assets/02-results.png" alt="RepoFinder results for production evaluations with the OpenAI Node SDK" />
-            <div class="result-highlight result-status"><span>OpenAI ranked four candidates</span></div>
-            <div class="result-highlight result-cards"><span>Task-specific shortlist</span></div>
-            <div class="legend legend-yellow">Evidence</div>
-            <div class="legend legend-mint">Fit</div>
           </div>
         </section>
 
-        <section class="slide fit-slide" data-slide="6" aria-labelledby="slide-6-title">
+        <section class="slide fit-slide" data-slide="5" aria-labelledby="slide-5-title">
           <div class="copy fit-copy">
             <p class="eyebrow mint">Understand the fit</p>
-            <h2 id="slide-6-title">Reasoning you can inspect.</h2>
+            <h2 id="slide-5-title">Reasoning you can inspect.</h2>
             <p class="lede">The answer separates what is factual from what is judgment.</p>
           </div>
           <article class="repo-card" aria-label="Example RepoFinder recommendation card">
@@ -124,32 +107,27 @@
               <span>Impact <i><b style="width: 82%"></b></i></span>
             </div>
             <footer><span>Updated 1mo ago</span><span>2 commits / 90d</span><span>8 contributors</span><span>1 fork</span></footer>
-            <div class="fit-label what-label">What + Why</div>
-            <div class="fit-label why-label">How</div>
-            <div class="fit-label how-label">Ease + Impact</div>
-            <div class="fit-label evidence-label">Live signals</div>
           </article>
         </section>
 
-        <section class="slide chat-slide" data-slide="7" aria-labelledby="slide-7-title">
+        <section class="slide chat-slide" data-slide="6" aria-labelledby="slide-6-title">
           <div class="slide-title-row compact-title">
             <div>
               <p class="eyebrow mint">Go deeper</p>
-              <h2 id="slide-7-title">Turn a candidate into an experiment.</h2>
+              <h2 id="slide-6-title">Turn a candidate into an experiment.</h2>
             </div>
             <p class="slide-note">Ask the question that moves your work forward.</p>
           </div>
           <div class="screen chat-screen">
             <img src="/slides-v2/assets/03-chat-open.png" alt="RepoFinder chat opened for the Simba repository" />
             <div class="chat-question">How would I test this in one afternoon?</div>
-            <svg class="chat-arrow" viewBox="0 0 220 100" aria-hidden="true"><path d="M12 16 C 96 16, 132 40, 202 86" /><path d="M184 84 L202 86 L194 69" /></svg>
           </div>
         </section>
 
-        <section class="slide practical-slide" data-slide="8" aria-labelledby="slide-8-title">
+        <section class="slide practical-slide" data-slide="7" aria-labelledby="slide-7-title">
           <div class="copy copy-left narrow-copy">
             <p class="eyebrow blue">Make it practical</p>
-            <h2 id="slide-8-title">A next move,<br />not another result.</h2>
+            <h2 id="slide-7-title">A next move,<br />not another result.</h2>
             <ul class="step-list">
               <li><span>1</span>Start with a small sample</li>
               <li><span>2</span>Compare against the baseline</li>
@@ -158,26 +136,25 @@
           </div>
           <div class="screen practical-screen">
             <img src="/slides-v2/assets/04-chat-first-answer.png" alt="RepoFinder chat answer with a practical evaluation plan and tradeoffs" />
-            <div class="tradeoff-bracket"><span>Fit and tradeoffs</span></div>
           </div>
         </section>
 
-        <section class="slide taste-slide" data-slide="9" aria-labelledby="slide-9-title">
+        <section class="slide taste-slide" data-slide="8" aria-labelledby="slide-8-title">
           <div class="taste-bg screen"><img src="/slides-v2/assets/04-chat-first-answer.png" alt="Dimmed RepoFinder chat behind a follow-up question" /></div>
           <div class="taste-content">
             <p class="eyebrow mint">Add your taste</p>
-            <h2 id="slide-9-title">Now tell it what the rankings cannot know.</h2>
+            <h2 id="slide-8-title">Now tell it what the rankings cannot know.</h2>
             <blockquote>
               “I like the evaluation and monitoring idea, but do you have something more like a <mark>lightweight TypeScript library</mark> I can add <mark>directly</mark> to openai-node?”
             </blockquote>
           </div>
         </section>
 
-        <section class="slide change-slide" data-slide="10" aria-labelledby="slide-10-title">
+        <section class="slide change-slide" data-slide="9" aria-labelledby="slide-9-title">
           <div class="slide-title-row compact-title">
             <div>
               <p class="eyebrow mint">Watch the answer change</p>
-              <h2 id="slide-10-title">Constraints make the answer better.</h2>
+              <h2 id="slide-9-title">Constraints make the answer better.</h2>
             </div>
             <p class="slide-note">The original result can be good and still be wrong for you.</p>
           </div>
@@ -191,9 +168,9 @@
           </div>
         </section>
 
-        <section class="slide surfaces-slide" data-slide="11" aria-labelledby="slide-11-title">
+        <section class="slide surfaces-slide" data-slide="10" aria-labelledby="slide-10-title">
           <p class="eyebrow blue">One capability, two ways to work</p>
-          <h2 id="slide-11-title">Use RepoFinder yourself, or give it to an agent.</h2>
+          <h2 id="slide-10-title">Use RepoFinder yourself, or give it to an agent.</h2>
           <div class="surface-map">
             <article class="surface human-surface">
               <span class="surface-icon" aria-hidden="true">◉</span>
@@ -222,9 +199,9 @@
           <p class="accuracy-note">The browser owns the dedicated follow-up chat. MCP returns structured recommendations for an agent workflow.</p>
         </section>
 
-        <section class="slide close-slide" data-slide="12" aria-labelledby="slide-12-title">
+        <section class="slide close-slide" data-slide="11" aria-labelledby="slide-11-title">
           <p class="eyebrow mint">Move forward faster</p>
-          <h2 id="slide-12-title">From an open question to a focused next step.</h2>
+          <h2 id="slide-11-title">From an open question to a focused next step.</h2>
           <div class="journey" aria-label="RepoFinder product journey">
             <div class="journey-node mint-node"><span>1</span><strong>Project<br />+ goal</strong></div>
             <i>→</i>
@@ -255,7 +232,7 @@
       <footer class="deck-footer">
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
         <button class="nav-button" id="previous" type="button" aria-label="Previous slide">←</button>
-        <span class="counter"><strong id="current-slide">01</strong><span>/ 12</span></span>
+        <span class="counter"><strong id="current-slide">01</strong><span>/ 11</span></span>
         <button class="nav-button" id="next" type="button" aria-label="Next slide">→</button>
       </footer>
     </main>

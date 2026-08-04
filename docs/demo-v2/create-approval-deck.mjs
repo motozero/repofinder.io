@@ -22,11 +22,7 @@ const scenes = [
   },
   {
     title: "Name the project and the outcome.",
-    narration: "I start with a real project, the OpenAI Node SDK, and a concrete goal, production evaluations.",
-  },
-  {
-    title: "One action gets to value.",
-    narration: "One action sends both pieces of context to RepoFinder.",
+    narration: "I start with a real project, the OpenAI Node SDK, and a concrete goal, production evaluations. One action sends both pieces of context to RepoFinder.",
   },
   {
     title: "Ranked for this task.",

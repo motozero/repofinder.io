@@ -1,16 +1,15 @@
 const scenes = [
   { time: "0:00 to 0:09", copy: "This is the moment RepoFinder becomes more useful than a list of popular repositories. I asked for something lighter, and it changed the recommendation." },
   { time: "0:09 to 0:17", copy: "GitHub stars tell me what is popular. They do not tell me what fits my project, my goal, or the way I want to work." },
-  { time: "0:17 to 0:27", copy: "I start with a real project, the OpenAI Node SDK, and a concrete goal, production evaluations." },
-  { time: "0:27 to 0:34", copy: "One action sends both pieces of context to RepoFinder." },
-  { time: "0:34 to 0:45", copy: "It searches live GitHub data, then OpenAI ranks the candidates for this task. The result is an evidence-backed starting point, not a generic popularity contest." },
-  { time: "0:45 to 0:55", copy: "Each result explains what the repository does, why it fits, how I could use it, and the likely ease and impact. Current GitHub signals stay visible beside the reasoning." },
-  { time: "0:55 to 1:05", copy: "The shortlist gets me oriented. The conversation helps me decide. I can open any result and ask how to test it in one afternoon." },
-  { time: "1:05 to 1:16", copy: "RepoFinder turns the recommendation into a practical experiment, including what to try first, what to measure, and where the tradeoffs are." },
-  { time: "1:16 to 1:27", copy: "Then I add the part a star count cannot know. I like the idea, but I want a lightweight TypeScript library that fits directly into openai-node." },
-  { time: "1:27 to 1:40", copy: "It acknowledges that the original result is too heavy, offers lighter alternatives, and gives me a focused next step. My taste and constraints changed the answer." },
-  { time: "1:40 to 1:52", copy: "A person can explore and refine recommendations in the browser. An agent can call the same recommendation capability through MCP and receive structured results it can use in its own workflow." },
-  { time: "1:52 to 2:00", copy: "RepoFinder helps humans and agents move forward with evidence, context, and individual taste. Build better, focused, and faster." },
+  { time: "0:17 to 0:29", copy: "I start with a real project, the OpenAI Node SDK, and a concrete goal, production evaluations. One action sends both pieces of context to RepoFinder." },
+  { time: "0:29 to 0:40", copy: "It searches live GitHub data, then OpenAI ranks the candidates for this task. The result is an evidence-backed starting point, not a generic popularity contest." },
+  { time: "0:40 to 0:50", copy: "Each result explains what the repository does, why it fits, how I could use it, and the likely ease and impact. Current GitHub signals stay visible beside the reasoning." },
+  { time: "0:50 to 1:00", copy: "The shortlist gets me oriented. The conversation helps me decide. I can open any result and ask how to test it in one afternoon." },
+  { time: "1:00 to 1:11", copy: "RepoFinder turns the recommendation into a practical experiment, including what to try first, what to measure, and where the tradeoffs are." },
+  { time: "1:11 to 1:22", copy: "Then I add the part a star count cannot know. I like the idea, but I want a lightweight TypeScript library that fits directly into openai-node." },
+  { time: "1:22 to 1:35", copy: "It acknowledges that the original result is too heavy, offers lighter alternatives, and gives me a focused next step. My taste and constraints changed the answer." },
+  { time: "1:35 to 1:47", copy: "A person can explore and refine recommendations in the browser. An agent can call the same recommendation capability through MCP and receive structured results it can use in its own workflow." },
+  { time: "1:47 to 1:55", copy: "RepoFinder helps humans and agents move forward with evidence, context, and individual taste. Build better, focused, and faster." },
 ];
 
 const slides = [...document.querySelectorAll(".slide")];
