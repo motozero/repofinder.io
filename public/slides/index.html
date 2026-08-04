@@ -38,13 +38,17 @@
       .demo ul { margin: 2vh 0 0; padding-left: 1.4em; color: #abc0bb; font-size: 1.55vw; line-height: 1.55; }
       .demo li { margin: 1.2vh 0; }
       .demo b { color: #edf7f4; }
+      a.brand { color: inherit; text-decoration: none; }
+      .deck-foot { position: fixed; z-index: 10; left: 2vw; right: 20vw; bottom: 2.4vh; display: flex; justify-content: space-between; gap: 2vw; align-items: baseline; color: #a6bbb6; font-size: max(1.05vw, 12px); }
+      .deck-foot a { color: #a6bbb6; text-decoration: none; }
+      .deck-foot a:hover { color: #21d6a0; }
       nav { position: fixed; z-index: 10; right: 2vw; bottom: 2vh; display: flex; gap: .6vw; }
       nav button { width: 2.4vw; height: 2.4vw; border: 1px solid #39504b; border-radius: 50%; background: #10201d; color: #edf7f4; font: inherit; cursor: pointer; }
       nav button[aria-current="true"] { border-color: #21d6a0; background: #21d6a0; color: #07100f; }
     </style>
   </head>
   <body>
-    <div class="brand">Repo<span>Finder</span></div>
+    <a class="brand" href="/">Repo<span>Finder</span></a>
     <section class="slide active" data-slide="1">
       <div class="eyebrow">Built with Codex, OpenAI, and Cloudflare</div>
       <h1>Find the repo that fits what you are building.</h1>
@@ -116,5 +120,10 @@
       <button type="button" data-go="5">5</button>
     </nav>
     <script src="/slides/slides.js" defer></script>
-  </body>
+  
+    <footer class="deck-foot">
+      <span>Built with Codex, OpenAI, and Cloudflare.</span>
+      <span><a href="/">Try it</a> · <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="https://github.com/motozero/repofinder.io/tree/main/lessons" target="_blank" rel="noopener">Read the build lessons</a> · <a href="https://github.com/motozero/repofinder.io#use-it-from-codex" target="_blank" rel="noopener">Use the MCP tool</a></span>
+    </footer>
+</body>
 </html>
