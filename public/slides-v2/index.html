@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A two-minute product demo of RepoFinder, from evidence-backed discovery to a recommendation shaped by your constraints and taste." />
+    <title>RepoFinder product demo</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/slides-v2/slides.css" />
+  </head>
+  <body>
+    <main class="deck" aria-label="RepoFinder product demo slide deck">
+      <header class="deck-header">
+        <a class="brand" href="/" target="_blank" rel="noopener" aria-label="Open RepoFinder in a new tab">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Repo<span>Finder</span></span>
+        </a>
+        <div class="deck-actions">
+          <button class="text-button" id="script-toggle" type="button" aria-controls="script-panel" aria-expanded="false">Script</button>
+          <a class="text-button" href="/" target="_blank" rel="noopener">Live demo ↗</a>
+        </div>
+      </header>
+
+      <div class="slides" aria-live="polite">
+        <section class="slide active outcome-slide" data-slide="1" aria-labelledby="slide-1-title">
+          <div class="copy copy-left">
+            <p class="eyebrow mint">The changed decision</p>
+            <h1 id="slide-1-title">Your first result is not your final decision.</h1>
+            <p class="lede">A useful recommendation should change when your constraints change.</p>
+            <ul class="outcome-points" aria-label="How the answer improved">
+              <li><span class="mint-dot"></span>Honest mismatch</li>
+              <li><span class="blue-dot"></span>Lighter options</li>
+              <li><span class="yellow-dot"></span>Focused next step</li>
+            </ul>
+          </div>
+          <div class="screen outcome-screen">
+            <img src="/slides-v2/assets/05-chat-refinement.png" alt="RepoFinder chat explaining that the original result is too heavy and suggesting lighter alternatives" />
+          </div>
+        </section>
+
+        <section class="slide signal-slide" data-slide="2" aria-labelledby="slide-2-title">
+          <div class="signal-stars" aria-hidden="true">
+            <span>★ 48.9k</span><span>★ 12.4k</span><span>★ 4.1k</span><span>★ 824</span>
+          </div>
+          <p class="eyebrow yellow">The situation</p>
+          <h2 id="slide-2-title">Popularity is a signal,<br />not the decision.</h2>
+          <div class="taste-flow" aria-label="Project context that shapes a useful decision">
+            <span class="chip mint-chip">My project</span>
+            <span class="chip blue-chip">My goal</span>
+            <span class="chip blue-chip">My constraints</span>
+            <span class="chip mint-chip">My taste</span>
+            <span class="flow-arrow" aria-hidden="true">→</span>
+            <strong class="decision-card">What fits me now?</strong>
+          </div>
+        </section>
+
+        <section class="slide screenshot-slide" data-slide="3" aria-labelledby="slide-3-title">
+          <div class="slide-title-row">
+            <div>
+              <p class="eyebrow mint">Start with context</p>
+              <h2 id="slide-3-title">Name the project and the outcome.</h2>
+            </div>
+            <p class="slide-note">One clear path from context to recommendation.</p>
+          </div>
+          <div class="context-steps" aria-label="The three steps to start a recommendation">
+            <span><b>1</b><small>Project</small>openai/openai-node</span>
+            <span><b>2</b><small>Goal</small>production evals</span>
+            <span class="press-step"><b>3</b><small>Press</small>Find repos</span>
+          </div>
+          <div class="screen wide-screen context-screen">
+            <img src="/slides-v2/assets/01-start-filled.png" alt="RepoFinder with the OpenAI Node SDK and production evaluations entered in the primary form" />
+          </div>
+        </section>
+
+        <section class="slide results-slide" data-slide="4" aria-labelledby="slide-4-title">
+          <div class="slide-title-row compact-title">
+            <div>
+              <p class="eyebrow yellow">Evidence-backed starting point</p>
+              <h2 id="slide-4-title">Ranked for this task.</h2>
+            </div>
+            <p class="slide-note">Live GitHub signals stay visible beside OpenAI reasoning.</p>
+          </div>
+          <div class="screen results-screen">
+            <img src="/slides-v2/assets/02-results.png" alt="RepoFinder results for production evaluations with the OpenAI Node SDK" />
+          </div>
+        </section>
+
+        <section class="slide fit-slide" data-slide="5" aria-labelledby="slide-5-title">
+          <div class="copy fit-copy">
+            <p class="eyebrow mint">Understand the fit</p>
+            <h2 id="slide-5-title">Reasoning you can inspect.</h2>
+            <p class="lede">The answer separates what is factual from what is judgment.</p>
+          </div>
+          <article class="repo-card" aria-label="Example RepoFinder recommendation card">
+            <header>
+              <div><span class="rank">#1</span><h3>GitHamza0206/simba</h3></div>
+              <span class="stars">★ 1.5k</span>
+            </header>
+            <p class="language">TypeScript</p>
+            <div class="reason-grid">
+              <p><strong>What</strong><span>Customer service and RAG platform with evaluation and monitoring.</span></p>
+              <p><strong>Why</strong><span>A maintained option that complements an OpenAI workflow.</span></p>
+              <p class="wide"><strong>How</strong><span>Test its evaluation definitions and dashboard against a small production sample before adopting the wider platform.</span></p>
+            </div>
+            <div class="rating-row">
+              <span>Ease <i><b style="width: 62%"></b></i></span>
+              <span>Impact <i><b style="width: 82%"></b></i></span>
+            </div>
+            <footer><span>Updated 1mo ago</span><span>2 commits / 90d</span><span>8 contributors</span><span>1 fork</span></footer>
+          </article>
+        </section>
+
+        <section class="slide chat-slide" data-slide="6" aria-labelledby="slide-6-title">
+          <div class="slide-title-row compact-title">
+            <div>
+              <p class="eyebrow mint">Go deeper</p>
+              <h2 id="slide-6-title">Turn a candidate into an experiment.</h2>
+            </div>
+            <p class="slide-note">Ask the question that moves your work forward.</p>
+          </div>
+          <div class="screen chat-screen">
+            <img src="/slides-v2/assets/03-chat-open.png" alt="RepoFinder chat opened for the Simba repository" />
+            <div class="chat-question">How would I test this in one afternoon?</div>
+          </div>
+        </section>
+
+        <section class="slide practical-slide" data-slide="7" aria-labelledby="slide-7-title">
+          <div class="copy copy-left narrow-copy">
+            <p class="eyebrow blue">Make it practical</p>
+            <h2 id="slide-7-title">A next move,<br />not another result.</h2>
+            <ul class="step-list">
+              <li><span>1</span>Start with a small sample</li>
+              <li><span>2</span>Compare against the baseline</li>
+              <li><span>3</span>Test the integration last</li>
+            </ul>
+          </div>
+          <div class="screen practical-screen">
+            <img src="/slides-v2/assets/04-chat-first-answer.png" alt="RepoFinder chat answer with a practical evaluation plan and tradeoffs" />
+          </div>
+        </section>
+
+        <section class="slide taste-slide" data-slide="8" aria-labelledby="slide-8-title">
+          <div class="taste-bg screen"><img src="/slides-v2/assets/04-chat-first-answer.png" alt="Dimmed RepoFinder chat behind a follow-up question" /></div>
+          <div class="taste-content">
+            <p class="eyebrow mint">Add your taste</p>
+            <h2 id="slide-8-title">Now tell it what the rankings cannot know.</h2>
+            <blockquote>
+              “I like the evaluation and monitoring idea, but do you have something more like a <mark>lightweight TypeScript library</mark> I can add <mark>directly</mark> to openai-node?”
+            </blockquote>
+          </div>
+        </section>
+
+        <section class="slide change-slide" data-slide="9" aria-labelledby="slide-9-title">
+          <div class="slide-title-row compact-title">
+            <div>
+              <p class="eyebrow mint">Watch the answer change</p>
+              <h2 id="slide-9-title">Constraints make the answer better.</h2>
+            </div>
+            <p class="slide-note">The original result can be good and still be wrong for you.</p>
+          </div>
+          <div class="screen change-screen">
+            <img src="/slides-v2/assets/05-chat-refinement.png" alt="RepoFinder final refinement answer with lighter TypeScript alternatives" />
+            <ol class="reveal-steps">
+              <li><span>1</span><strong>Honest mismatch</strong><small>“Not really.”</small></li>
+              <li><span>2</span><strong>Lighter alternatives</strong><small>OpenAI Evals, Langfuse, Braintrust</small></li>
+              <li><span>3</span><strong>Focused stack</strong><small>Keep, instrument, test</small></li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="slide surfaces-slide" data-slide="10" aria-labelledby="slide-10-title">
+          <p class="eyebrow blue">One capability, two ways to work</p>
+          <h2 id="slide-10-title">Use RepoFinder yourself, or give it to an agent.</h2>
+          <div class="surface-map">
+            <article class="surface human-surface">
+              <span class="surface-icon" aria-hidden="true">◉</span>
+              <h3>Human in the browser</h3>
+              <p>Search, inspect, ask follow-up questions, and refine by taste.</p>
+              <div class="mini-browser"><i></i><i></i><i></i><strong>Conversation</strong><span>What fits my project?</span><span>I want something lighter.</span></div>
+            </article>
+            <div class="capability">
+              <span>Shared capability</span>
+              <strong>RepoFinder<br />results</strong>
+            </div>
+            <article class="surface agent-surface">
+              <span class="surface-icon" aria-hidden="true">⌁</span>
+              <h3>Agent through MCP</h3>
+              <p>Call <code>recommend_repos</code> and receive structured recommendations.</p>
+              <pre><code>{
+  "repo": "GitHamza0206/simba",
+  "why": "...",
+  "how": "...",
+  "ease": 3,
+  "impact": 4
+}</code></pre>
+            </article>
+            <svg class="surface-lines" viewBox="0 0 1000 260" aria-hidden="true"><path class="mint-line" d="M300 130 C380 130 395 130 470 130" /><path class="blue-line" d="M700 130 C620 130 605 130 530 130" /></svg>
+          </div>
+          <p class="accuracy-note">The browser owns the dedicated follow-up chat. MCP returns structured recommendations for an agent workflow.</p>
+        </section>
+
+        <section class="slide close-slide" data-slide="11" aria-labelledby="slide-11-title">
+          <p class="eyebrow mint">Move forward faster</p>
+          <h2 id="slide-11-title">From an open question to a focused next step.</h2>
+          <div class="journey" aria-label="RepoFinder product journey">
+            <div class="journey-node mint-node"><span>1</span><strong>Project<br />+ goal</strong></div>
+            <i>→</i>
+            <div class="journey-node yellow-node"><span>2</span><strong>Evidence-backed<br />shortlist</strong></div>
+            <i>→</i>
+            <div class="journey-node mint-node"><span>3</span><strong>Ask<br />questions</strong></div>
+            <i>→</i>
+            <div class="journey-node blue-node"><span>4</span><strong>Add constraints<br />+ taste</strong></div>
+            <i>→</i>
+            <div class="journey-node mint-node"><span>5</span><strong>Refined<br />recommendation</strong></div>
+            <i>→</i>
+            <div class="journey-node final-node"><span>6</span><strong>Focused<br />next step</strong></div>
+            <svg class="journey-loop" viewBox="0 0 1000 150" aria-hidden="true"><path d="M790 28 C760 130 400 135 365 64" /><path d="M352 77 L365 64 L376 80" /></svg>
+          </div>
+          <div class="close-copy">
+            <p>Where your taste matters more than the number of stars.</p>
+            <a href="https://repofinder.io" target="_blank" rel="noopener">repofinder.io ↗</a>
+          </div>
+        </section>
+      </div>
+
+      <aside id="script-panel" class="script-panel" aria-hidden="true">
+        <div class="script-head"><span>Narration for this scene</span><button id="script-close" type="button" aria-label="Close script">×</button></div>
+        <p id="script-time"></p>
+        <blockquote id="script-copy"></blockquote>
+      </aside>
+
+      <footer class="deck-footer">
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+        <button class="nav-button" id="previous" type="button" aria-label="Previous slide">←</button>
+        <span class="counter"><strong id="current-slide">01</strong><span>/ 11</span></span>
+        <button class="nav-button" id="next" type="button" aria-label="Next slide">→</button>
+      </footer>
+    </main>
+    <script src="/slides-v2/slides.js"></script>
+  </body>
+</html>
