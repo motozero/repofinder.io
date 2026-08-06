@@ -24,23 +24,22 @@
 
       <div class="slides" aria-live="polite">
         <section class="slide active idea-slide" data-slide="1" aria-labelledby="slide-1-title">
+          <aside class="sticky-note primary-sticky">
+            <span>What kind of repo are you looking for?</span>
+            <strong>“I’d like to replace this image on the home page of my portfolio site with a few different video avatars that welcome users on page load and introduce Christo as a new type of builder and invite them to click around to learn more.”</strong>
+          </aside>
+          <svg class="annotation-arrow idea-arrow" viewBox="0 0 500 300" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M470 50 C390 90 310 180 165 270" />
+            <path d="M190 266 L165 270 L175 246" />
+          </svg>
           <div class="idea-layout">
             <div class="portfolio-shot screenshot-frame">
               <img src="./assets/portfolio-home.png" alt="The letsgochristo.com home page" />
               <span class="focus-box portfolio-focus" aria-hidden="true"></span>
-              <svg class="annotation-arrow portfolio-arrow" viewBox="0 0 320 170" aria-hidden="true">
-                <path d="M32 28 C126 22 166 72 254 122" />
-                <path d="M235 120 L254 122 L246 104" />
-              </svg>
             </div>
             <div class="idea-copy">
               <p class="eyebrow mint">The idea</p>
               <h1 id="slide-1-title">What if my portfolio could introduce me?</h1>
-              <p class="lede">Let visitors meet Christo without booking a call.</p>
-              <aside class="sticky-note primary-sticky">
-                <span>Goal</span>
-                <strong>Add an AI video avatar</strong>
-              </aside>
             </div>
           </div>
         </section>
@@ -128,7 +127,7 @@
           <h2 id="slide-6-title">A next step, not another tab.</h2>
           <div class="decision-flow" aria-label="From need to focused test">
             <article class="decision-node">
-              <span>1</span><small>Need</small><strong>Let visitors meet Christo</strong>
+              <span>1</span><small>Need</small><strong>Welcome visitors with video avatars</strong>
             </article>
             <i>→</i>
             <article class="decision-node">
@@ -209,9 +208,19 @@
 
       <footer class="deck-footer">
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <button class="nav-button" id="previous" type="button" aria-label="Previous slide">←</button>
-        <span class="counter"><strong id="current-slide">01</strong><span>/ 08</span></span>
-        <button class="nav-button" id="next" type="button" aria-label="Next slide">→</button>
+        <span class="footer-credit">Built with Codex, OpenAI, and Cloudflare.</span>
+        <nav class="footer-links" aria-label="RepoFinder resources">
+          <a href="https://repofinder.io">Try it</a><span>·</span>
+          <a href="https://repofinder.io/contact">Contact</a><span>·</span>
+          <a href="https://repofinder.io/privacy">Privacy</a><span>·</span>
+          <a href="https://github.com/motozero/repofinder.io/tree/main/lessons" target="_blank" rel="noopener">Read the build lessons</a><span>·</span>
+          <a href="https://github.com/motozero/repofinder.io#use-it-from-codex" target="_blank" rel="noopener">Use the MCP tool</a>
+        </nav>
+        <div class="footer-nav">
+          <button class="nav-button" id="previous" type="button" aria-label="Previous slide">←</button>
+          <span class="counter"><strong id="current-slide">01</strong><span>/ 08</span></span>
+          <button class="nav-button" id="next" type="button" aria-label="Next slide">→</button>
+        </div>
       </footer>
     </main>
     <script src="./slides.js"></script>

@@ -1,5 +1,5 @@
 const scenes = [
-  { time: "0:00 to 0:11", copy: "This is my portfolio. People can read about my work, but I want them to meet me without booking a call. The goal is simple: add an AI video avatar." },
+  { time: "0:00 to 0:11", copy: "This is my portfolio. I want the space traveler to become a set of video avatars that welcome visitors, introduce Christo as a new kind of builder, and invite them to explore. I ask RepoFinder what can power that experience." },
   { time: "0:11 to 0:23", copy: "I give RepoFinder the live site and the outcome I want. That context matters. I am not searching for the most famous avatar project. I am asking what fits this website." },
   { time: "0:23 to 0:37", copy: "RepoFinder searches live GitHub data and uses OpenAI to rank the options. Duix-Avatar rises to the top with fourteen thousand stars and full control, but its low ease score reveals the catch: I would need GPU infrastructure." },
   { time: "0:37 to 0:50", copy: "That is where the demo becomes a decision tool. I open the result and add the constraint the rankings could not know: I care more about ease, and I am willing to pay." },
